@@ -44,8 +44,8 @@ jobs:
         uses: actions/github-script@v9
         env:
           SOURCE_TOKEN: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
-          SOURCE_REF: ${{ inputs.ref }}
-          FORCE: ${{ inputs.force }}
+          SOURCE_REF: ${{ inputs.ref || 'fix/test-contracts-dbcopy-20261113' }}
+          FORCE: ${{ inputs.force || github.event_name == 'push' }}
           BUILD_RUNNER: ${{ inputs.runner || 'ubuntu-24.04' }}
         with:
           github-token: ${{ github.token }}
