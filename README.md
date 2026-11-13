@@ -10,7 +10,7 @@ This repository contains CI workflow definitions only. It must never contain a c
 - It checks all open same-repository PRs targeting `main` and scans `main`, `fix/**`, `feat/**`, `refactor/**`, and `ci/**` branch tips whose commit timestamp is within the last 15 minutes. This detects recent pushes without building every stale historical branch on first setup.
 - It deduplicates work by commit SHA using the `goxboard-builder/ci` commit status.
 - New commits are dispatched to `build-private.yml`.
-- The build workflow runs Go, Web, and Docker jobs on standard GitHub-hosted Ubuntu runners and writes one aggregate status back to the private commit.
+- The build workflow runs Go, Web, and Docker jobs on pinned `ubuntu-24.04` runners by default and writes one aggregate status back to the private commit. `ubuntu-26.04` can be selected as a manual compatibility test before changing the default.
 - No build artifacts or caches are uploaded. Checkout credentials are not persisted.
 
 ## Required secret
@@ -27,7 +27,7 @@ Create a fine-grained personal access token and add it to this repository as:
 Add the secret at:
 https://github.com/yuyuzheng-dev/goxboard-builder/settings/secrets/actions/new
 
-After adding the secret, open the Actions tab and run **Poll private goxboard** with `ref` set to the PR branch or exact commit SHA and `force=true` to test that revision once. For PR #25, the current head is `6f638008be0ec4161b0adbb96721e00da8439877`. Leave `ref` empty to scan all eligible branches and open same-repository PRs.
+To test a specific revision, run **Poll private goxboard** from the Actions tab with `ref` set to the PR branch or exact commit SHA and `force=true`. The optional `runner` input defaults to `ubuntu-24.04`; choose `ubuntu-26.04` to run a full compatibility build on the new image. Leave `ref` empty to scan all eligible branches and open same-repository PRs.
 
 ## Security and visibility
 
