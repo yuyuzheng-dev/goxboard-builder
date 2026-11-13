@@ -27,7 +27,7 @@ Create a fine-grained personal access token and add it to this repository as:
 Add the secret at:
 https://github.com/yuyuzheng-dev/goxboard-builder/settings/secrets/actions/new
 
-After adding the secret, open the Actions tab and run **Poll private goxboard** with `force=true` to queue a fresh test of all eligible branches/PRs. You can also provide a branch, tag, or commit SHA in the optional `ref` input to build one exact revision.
+After adding the secret, open the Actions tab and run **Poll private goxboard** with `ref` set to the PR branch or exact commit SHA and `force=true` to test that revision once. For PR #25, the current head is `6f638008be0ec4161b0adbb96721e00da8439877`. Leave `ref` empty to scan all eligible branches and open same-repository PRs.
 
 ## Security and visibility
 
