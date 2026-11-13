@@ -1,6 +1,6 @@
 name: Build private goxboard
 
-run-name: Build goxboard ${{ inputs.source_ref }} @ ${{ inputs.sha }}
+run-name: Build goxboard ${{ inputs.source_ref }} @ ${{ inputs.sha }} on ${{ inputs.runner || 'ubuntu-24.04' }}
 
 on:
   workflow_dispatch:
@@ -22,18 +22,26 @@ on:
         description: Associated pull request number, if any
         required: false
         type: string
+      runner:
+        description: Ubuntu runner image used for this build
+        required: false
+        default: ubuntu-24.04
+        type: choice
+        options:
+          - ubuntu-24.04
+          - ubuntu-26.04
 
 permissions:
   contents: read
 
 concurrency:
-  group: goxboard-build-${{ inputs.sha }}
+  group: goxboard-build-${{ inputs.sha }}-${{ inputs.runner || 'ubuntu-24.04' }}
   cancel-in-progress: false
 
 jobs:
   go:
     name: Go (build, vet, vulnerability scan, race and DB integration tests)
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner || 'ubuntu-24.04' }}
     timeout-minutes: 45
     services:
       postgres:
@@ -108,7 +116,7 @@ jobs:
 
   web:
     name: Web (install, audit, lint, typecheck, test, build)
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner || 'ubuntu-24.04' }}
     timeout-minutes: 35
     steps:
       - name: Checkout private source at exact commit
@@ -131,7 +139,7 @@ jobs:
 
       - name: Set up pnpm
         if: steps.detect.outputs.present == 'true'
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6.1.1
         with:
           version: 12
 
@@ -167,7 +175,7 @@ jobs:
 
   docker:
     name: Docker (production image smoke)
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner || 'ubuntu-24.04' }}
     timeout-minutes: 40
     steps:
       - name: Checkout private source at exact commit
@@ -191,11 +199,11 @@ jobs:
     name: Report aggregate status to private commit
     if: always()
     needs: [go, web, docker]
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner || 'ubuntu-24.04' }}
     timeout-minutes: 5
     steps:
       - name: Publish commit status
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
           script: |
