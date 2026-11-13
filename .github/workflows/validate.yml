@@ -1,0 +1,30 @@
+name: Validate builder workflows
+
+on:
+  push:
+    paths:
+      - ".github/workflows/**"
+      - "README.md"
+  pull_request:
+    paths:
+      - ".github/workflows/**"
+      - "README.md"
+
+permissions:
+  contents: read
+
+jobs:
+  actionlint:
+    name: actionlint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version: "1.27.x"
+          cache: false
+
+      - name: Validate workflow syntax and expressions
+        run: go run github.com/rhysd/actionlint/cmd/actionlint@latest -color
