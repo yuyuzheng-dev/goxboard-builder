@@ -7,7 +7,7 @@ This repository contains CI workflow definitions only. It must never contain a c
 ## How it works
 
 - `poll-private.yml` runs on a five-minute schedule and on manual dispatch.
-- It checks the private repository's `main`, `fix/**`, `feat/**`, `refactor/**`, and `ci/**` branches, plus open same-repository PRs targeting `main`.
+- It checks all open same-repository PRs targeting `main` and scans `main`, `fix/**`, `feat/**`, `refactor/**`, and `ci/**` branch tips whose commit timestamp is within the last 15 minutes. This detects recent pushes without building every stale historical branch on first setup.
 - It deduplicates work by commit SHA using the `goxboard-builder/ci` commit status.
 - New commits are dispatched to `build-private.yml`.
 - The build workflow runs Go, Web, and Docker jobs on standard GitHub-hosted Ubuntu runners and writes one aggregate status back to the private commit.
