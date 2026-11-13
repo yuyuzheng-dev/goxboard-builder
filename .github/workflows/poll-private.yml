@@ -1,6 +1,9 @@
 name: Poll private goxboard
 
 on:
+  push:
+    paths:
+      - ".github/workflows/poll-private.yml"
   schedule:
     - cron: '*/5 * * * *'
   workflow_dispatch:
