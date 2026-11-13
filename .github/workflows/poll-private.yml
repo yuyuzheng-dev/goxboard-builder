@@ -17,6 +17,14 @@ on:
         required: false
         default: false
         type: boolean
+      runner:
+        description: Ubuntu runner image used for dispatched builds
+        required: false
+        default: ubuntu-24.04
+        type: choice
+        options:
+          - ubuntu-24.04
+          - ubuntu-26.04
 
 permissions:
   actions: write
@@ -29,15 +37,16 @@ concurrency:
 jobs:
   discover:
     name: Discover source commits and queue builds
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - name: Discover eligible commits and dispatch build workflows
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           SOURCE_TOKEN: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
           SOURCE_REF: ${{ inputs.ref }}
           FORCE: ${{ inputs.force }}
+          BUILD_RUNNER: ${{ inputs.runner || 'ubuntu-24.04' }}
         with:
           github-token: ${{ github.token }}
           script: |
@@ -173,6 +182,7 @@ jobs:
                     source_ref: candidate.source_ref,
                     source_kind: candidate.source_kind,
                     pr_number: candidate.pr_number
+                    runner: process.env.BUILD_RUNNER
                   }
                 });
                 queued++;
