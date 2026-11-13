@@ -125,7 +125,9 @@ jobs:
 
             for (const candidate of candidates.values()) {
               const statuses = await sourceApi(base + '/commits/' + candidate.sha + '/statuses?per_page=100');
-              const previous = statuses.find(status => status.context === 'goxboard-builder/ci');
+              const previous = statuses
+                .filter(status => status.context === 'goxboard-builder/ci')
+                .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))[0];
               if (previous && !force) {
                 const pendingAge = Date.now() - Date.parse(previous.created_at);
                 if (previous.state !== 'pending' || pendingAge < 45 * 60 * 1000) {
