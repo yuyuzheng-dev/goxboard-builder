@@ -101,12 +101,24 @@ jobs:
               const commit = await sourceApi(base + '/commits/' + encodeURIComponent(manualRef));
               addCandidate(commit.sha, manualRef, 'manual', '');
             } else {
+              const recentCutoff = Date.now() - 15 * 60 * 1000;
               const branches = await listAll(base + '/branches');
               for (const branch of branches) {
                 const name = branch.name;
                 const eligible = name === 'main' ||
                   ['fix/', 'feat/', 'refactor/', 'ci/'].some(prefix => name.startsWith(prefix));
-                if (eligible) addCandidate(branch.commit.sha, name, 'branch', '');
+                if (!eligible) continue;
+
+                // Only bootstrap recently updated branch tips. Open PR heads are
+                // always considered below, so old historical feature branches
+                // do not trigger a large one-time build storm.
+                const commit = await sourceApi(base + '/commits/' + branch.commit.sha);
+                const committedAt = Date.parse(
+                  commit.commit?.committer?.date || commit.commit?.author?.date || ''
+                );
+                if (Number.isFinite(committedAt) && committedAt >= recentCutoff) {
+                  addCandidate(branch.commit.sha, name, 'branch', '');
+                }
               }
 
               const pullRequests = await listAll(base + '/pulls?state=open');
