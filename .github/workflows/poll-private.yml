@@ -299,3 +299,5 @@ jobs:
               releasesQueued + ' release(s), skipped ' + releasesSkipped + ' release(s).');
 
 # Revalidation cycle: source PR branch commits are picked up by the next poller run.
+
+# Revalidation cycle: include the latest source branch commits after the gofmt and ruleset fixture fixes.
