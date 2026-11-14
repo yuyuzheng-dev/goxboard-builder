@@ -93,17 +93,20 @@ jobs:
             exit 1
           fi
 
-      - name: Scan residual legacy product and build names
+      - name: Reject legacy project identifiers across the repository
         working-directory: source
         shell: bash
         run: |
           set -euo pipefail
-          legacy_hits="$(git grep -n -E 'GG Bond|GG%20Bond|github.com/linusxiong/(ggboard|goxboard)|ggboard:ci|cmd/ggboard' -- cmd internal web deploy Makefile go.mod | grep -viE 'original.*GG Bond' || true)"
+          legacy_hits="$(git grep -n -I -i -E 'ggboard' -- . || true)"
           if [[ -n "$legacy_hits" ]]; then
-            printf '%s\n' "$legacy_hits"
-            echo "::error::legacy product or build identifier remains in active source/configuration"
+            printf '%s\\n' "$legacy_hits"
+            echo "::error::legacy pre-Goxboard identifiers remain in tracked source, tests, configuration, deployment or documentation"
             exit 1
           fi
+          echo "No legacy project identifiers remain in tracked source files."
+          echo "Coverage includes PostgreSQL/MySQL usernames and database names, Docker volumes, SQLite files, BTCPay metadata, CLI output, tests and documentation."
+
       - name: Verify Goxboard persistence identity namespaces
         working-directory: source
         shell: bash
@@ -116,18 +119,18 @@ jobs:
             exit 1
           fi
           echo "SQLite, JWT, TOTP, AGE, and backup-code namespaces use Goxboard."
-      - name: Report legacy environment aliases
+      - name: Reject legacy environment variable prefixes
         working-directory: source
         shell: bash
         run: |
           set -euo pipefail
-          legacy_env_refs="$(git grep -n 'GGBOARD_' -- .env.example cmd internal web deploy Makefile || true)"
+          legacy_env_refs="$(git grep -n -I -i -E 'GGBOARD_' -- . || true)"
           if [[ -n "$legacy_env_refs" ]]; then
-            echo "::notice::Legacy GGBOARD_ references remain for compatibility review:"
-            printf '%s\n' "$legacy_env_refs"
-          else
-            echo "No legacy GGBOARD_ environment names remain in active code or build configuration."
+            printf '%s\\n' "$legacy_env_refs"
+            echo "::error::legacy environment variable prefixes are not supported"
+            exit 1
           fi
+          echo "No legacy environment variable prefixes remain."
 
       - name: Set up Go
         uses: actions/setup-go@v6
