@@ -66,8 +66,8 @@ jobs:
           --health-timeout=5s
           --health-retries=10
     env:
-      GGBOARD_IT_POSTGRES_DSN: postgres://postgres:test@127.0.0.1:5432/postgres?sslmode=disable
-      GGBOARD_IT_MYSQL_DSN: root:test@tcp(127.0.0.1:3306)/
+      GOXBOARD_IT_POSTGRES_DSN: postgres://postgres:test@127.0.0.1:5432/postgres?sslmode=disable
+      GOXBOARD_IT_MYSQL_DSN: root:test@tcp(127.0.0.1:3306)/
     steps:
       - name: Checkout private source at exact commit
         uses: actions/checkout@v5
@@ -190,10 +190,10 @@ jobs:
       - name: Build runtime image
         env:
           VERSION: ci-${{ inputs.sha }}
-        run: docker build -f source/deploy/Dockerfile --build-arg "VERSION=$VERSION" -t ggboard:ci source
+        run: docker build -f source/deploy/Dockerfile --build-arg "VERSION=$VERSION" -t goxboard:ci source
 
       - name: Check bundled CLI starts
-        run: docker run --rm ggboard:ci version
+        run: docker run --rm goxboard:ci version
 
   report:
     name: Report aggregate status to private commit
