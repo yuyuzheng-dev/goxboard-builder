@@ -35,5 +35,5 @@ jobs:
             internal/db/upgrade_test.go \
             internal/importer/xboard/run_test.go; do
             echo "===== gofmt diff: $file ====="
-            gofmt -d "$file"
+            gofmt -d "$file" || true
           done
