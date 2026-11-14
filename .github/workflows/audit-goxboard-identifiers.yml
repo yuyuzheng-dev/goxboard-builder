@@ -26,11 +26,13 @@ jobs:
         run: |
           set -uo pipefail
           echo "Source HEAD: $(git rev-parse HEAD)"
-          if git grep -n -I -i -E 'ggboard' -- . > /tmp/legacy-hits.txt; then
-            echo "===== LEGACY IDENTIFIER HITS ====="
-            cat /tmp/legacy-hits.txt
-            echo "===== HIT SUMMARY ====="
-            wc -l /tmp/legacy-hits.txt
-          else
-            echo "No legacy identifiers found."
+          legacy_hits="$(git grep -n -I -i -E 'ggboard' -- . || true)"
+          legacy_paths="$(git ls-files | grep -i -E 'ggboard' || true)"
+          if [[ -n "$legacy_hits" || -n "$legacy_paths" ]]; then
+            echo "===== LEGACY IDENTIFIER CONTENT HITS ====="
+            printf '%s\\n' "$legacy_hits"
+            echo "===== LEGACY IDENTIFIER PATH HITS ====="
+            printf '%s\\n' "$legacy_paths"
+            exit 1
           fi
+          echo "No legacy project identifiers remain in tracked file contents or paths."
