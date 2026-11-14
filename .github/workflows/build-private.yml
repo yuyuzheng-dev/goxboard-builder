@@ -107,6 +107,19 @@ jobs:
           echo "Legacy database, service, and volume identifiers are intentionally retained for data compatibility (see docs/DEPLOY.md)."
           git grep -n -E 'ggboard\.db|ggboard_(postgres|data)|ggboard' -- deploy docs | head -n 40 || true
 
+      - name: Report legacy environment aliases
+        working-directory: source
+        shell: bash
+        run: |
+          set -euo pipefail
+          legacy_env_refs="$(git grep -n 'GGBOARD_' -- cmd internal web deploy Makefile || true)"
+          if [[ -n "$legacy_env_refs" ]]; then
+            echo "::notice::Legacy GGBOARD_ references remain for compatibility review:"
+            printf '%s\n' "$legacy_env_refs"
+          else
+            echo "No legacy GGBOARD_ environment names remain in active code or build configuration."
+          fi
+
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
