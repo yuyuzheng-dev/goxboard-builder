@@ -28,7 +28,7 @@ on:
         type: boolean
         default: false
       ref:
-        description: Release tag to build, as refs/tags/vX.Y.Z[-pre]; empty builds the caller's ref
+        description: Release tag to build, as refs/tags/vX.Y.Z[-pre]; empty builds source main
         type: string
         default: ""
   workflow_dispatch:
@@ -103,7 +103,7 @@ jobs:
 
           # A tag builds as the tag itself: `git describe` would name another tag on the same commit (say v1.0.0-rc.1
           # promoted to v1.0.0). Anything else gets the same value as `make build`. The OCI version label, the image tag,
-          # `goxboard version` and the release binaries (release.yml) all agree.
+          # `goxboard version` and the release binaries (release-private.yml) all agree.
           if [[ "$ref_type" == tag ]]; then
             version="$ref_name"
           else
@@ -151,8 +151,8 @@ jobs:
 
       # `latest` is an explicit tag, not flavor latest=auto: metadata-action lets the first enabled tag entry decide
       # `latest`, so the result would depend on the order of the lines below.
-      # The semver entries get the tag through `value=` and the sha tag is raw, so both follow the checked-out ref
-      # rather than the event's. The `type=ref` entries only fire without an explicit ref (prep enforces that).
+            # Semver entries get the tag through `value=`; raw branch/tag entries use the checked-out private source ref,
+      # not the builder workflow event ref. The short SHA tag is always included.
       - name: Image tags and labels
         id: meta
         uses: docker/metadata-action@v6
