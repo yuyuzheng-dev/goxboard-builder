@@ -78,6 +78,21 @@ jobs:
           persist-credentials: false
           path: source
 
+      - name: Verify Go module path and scan legacy imports
+        working-directory: source
+        shell: bash
+        run: |
+          set -euo pipefail
+          module="$(sed -n '1s/^module //p' go.mod)"
+          if [[ "$module" != "github.com/yuyuzheng-dev/goxboard" ]]; then
+            echo "::error::go.mod module is '$module', expected github.com/yuyuzheng-dev/goxboard"
+            exit 1
+          fi
+          if git grep -n -E 'github.com/linusxiong/(ggboard|goxboard)' -- '*.go' go.mod; then
+            echo "::error::legacy Go import path remains in the source repository"
+            exit 1
+          fi
+
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
