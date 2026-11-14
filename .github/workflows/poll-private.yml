@@ -1,6 +1,6 @@
 name: Poll private goxboard
 
-# Source validation is centralized here: this poller discovers private source refs, queues builder workflows, reports status on the source commit, and verifies the repository-wide Go import migration, active branding scan, Goxboard SQLite/JWT/crypto identity namespaces, and tag-to-release handoff on the final squashed source revision with corrected GeoIP/Alipay tests and PostgreSQL/MySQL age-key, importer, and database migration integration suites.
+# Source validation is centralized here: this poller discovers private source refs, queues builder workflows, reports status on the source commit, and verifies the repository-wide Go import migration, active branding scan, Goxboard SQLite filename, JWT issuer, TOTP/AGE encryption, and backup-code namespaces, and tag-to-release handoff on the final squashed source revision with corrected GeoIP/Alipay tests and PostgreSQL/MySQL age-key, importer, and database migration integration suites.
 
 on:
   push:
