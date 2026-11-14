@@ -93,6 +93,23 @@ jobs:
           fi
           echo "sha=$actual" >> "$GITHUB_OUTPUT"
 
+      - name: Require successful Builder CI
+        uses: actions/github-script@v9
+        with:
+          github-token: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
+          script: |
+            const sha = "${{ steps.source.outputs.sha }}";
+            const { data: statuses } = await github.rest.repos.listCommitStatusesForRef({
+              owner: "yuyuzheng-dev",
+              repo: "goxboard",
+              ref: sha,
+              per_page: 100
+            });
+            const ci = statuses.find(status => status.context === "goxboard-builder/ci");
+            if (!ci || ci.state !== "success") {
+              core.setFailed("Source commit " + sha + " does not have a successful goxboard-builder/ci status.");
+            }
+
       # A section is the lines after its "## [X.Y.Z] - date" heading, up to the next "## " heading or the link
       # definitions at the end of the file, without leading blank lines. The notes are the CHANGELOG.md section, then the
       # CHANGELOG.zh-CN.md one under "## 简体中文". Tags from before the split (v1.0.1 and older) have no
