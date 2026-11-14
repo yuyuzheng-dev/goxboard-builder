@@ -1,0 +1,36 @@
+name: Audit Goxboard legacy identifiers
+
+on:
+  push:
+    branches:
+      - ci/audit-goxboard-old-identifiers-20261114
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout private Goxboard source
+        uses: actions/checkout@v5
+        with:
+          repository: yuyuzheng-dev/goxboard
+          ref: main
+          token: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
+          persist-credentials: false
+          path: source
+      - name: Find every old Goxboard identifier
+        working-directory: source
+        shell: bash
+        run: |
+          set -uo pipefail
+          echo "Source HEAD: $(git rev-parse HEAD)"
+          if git grep -n -I -i -E 'ggboard|ggboard_|ggboardpayment|ggboardbinding|ggboard/btcpay/v1|gg[[:space:]%20]+bond' -- . > /tmp/legacy-hits.txt; then
+            echo "===== LEGACY IDENTIFIER HITS ====="
+            cat /tmp/legacy-hits.txt
+            echo "===== HIT SUMMARY ====="
+            wc -l /tmp/legacy-hits.txt
+          else
+            echo "No legacy identifiers found."
+          fi
