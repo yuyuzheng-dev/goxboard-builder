@@ -301,3 +301,5 @@ jobs:
 # Revalidation cycle: source PR branch commits are picked up by the next poller run.
 
 # Revalidation cycle: include the latest source branch commits after the gofmt and ruleset fixture fixes.
+
+# Revalidation cycle: test PR #36 after merging the current main head.
