@@ -93,6 +93,18 @@ jobs:
             exit 1
           fi
 
+      - name: Scan residual legacy product and build names
+        working-directory: source
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git grep -n -E 'GG Bond|GG%20Bond|github.com/linusxiong/(ggboard|goxboard)|ggboard:ci|cmd/ggboard' -- cmd internal web deploy Makefile go.mod; then
+            echo "::error::legacy product or build identifier remains in active source/configuration"
+            exit 1
+          fi
+          echo "Legacy database, service, and volume identifiers are intentionally retained for data compatibility (see docs/DEPLOY.md)."
+          git grep -n -E 'ggboard\\.db|ggboard_(postgres|data)|ggboard' -- deploy docs | head -n 40 || true
+
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
