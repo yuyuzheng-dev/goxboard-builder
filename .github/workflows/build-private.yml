@@ -100,13 +100,13 @@ jobs:
           set -euo pipefail
           legacy_hits="$(git grep -n -I -i -E 'ggboard' -- . || true)"
           if [[ -n "$legacy_hits" ]]; then
-            printf '%s\\n' "$legacy_hits"
+            printf '%s\n' "$legacy_hits"
             echo "::error::legacy pre-Goxboard identifiers remain in tracked source, tests, configuration, deployment or documentation"
             exit 1
           fi
           legacy_paths="$(git ls-files | grep -i -E 'ggboard' || true)"
           if [[ -n "$legacy_paths" ]]; then
-            printf 'Legacy identifier in tracked path(s):\\n%s\\n' "$legacy_paths"
+            printf 'Legacy identifier in tracked path(s):\n%s\n' "$legacy_paths"
             echo "::error::legacy project identifiers remain in tracked file paths"
             exit 1
           fi
@@ -132,7 +132,7 @@ jobs:
           set -euo pipefail
           legacy_env_refs="$(git grep -n -I -i -E 'GGBOARD_' -- . || true)"
           if [[ -n "$legacy_env_refs" ]]; then
-            printf '%s\\n' "$legacy_env_refs"
+            printf '%s\n' "$legacy_env_refs"
             echo "::error::legacy environment variable prefixes are not supported"
             exit 1
           fi
