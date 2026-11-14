@@ -1,6 +1,6 @@
 name: Poll private goxboard
 
-# Source validation is centralized here: this poller discovers private source refs, queues Builder workflows, reports status on source commits, and verifies gofmt, Go build/vet/vulnerability/Race checks, PostgreSQL/MySQL integration, Web and Docker smoke tests, Goxboard-only retired-table cleanup, Xboard source-snapshot protection, and importer report/log secret redaction.
+# Source validation is centralized here: a push to this file, the schedule, or manual dispatch discovers private source refs, queues Builder workflows, reports status on source commits, and verifies gofmt, Go build/vet/vulnerability/Race checks, PostgreSQL/MySQL integration, Web and Docker smoke tests, Goxboard-only retired-table cleanup, Xboard source-snapshot protection, and importer report/log secret redaction.
 
 on:
   push:
