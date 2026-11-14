@@ -112,7 +112,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          legacy_env_refs="$(git grep -n 'GGBOARD_' -- cmd internal web deploy Makefile || true)"
+          legacy_env_refs="$(git grep -n 'GGBOARD_' -- .env.example cmd internal web deploy Makefile || true)"
           if [[ -n "$legacy_env_refs" ]]; then
             echo "::notice::Legacy GGBOARD_ references remain for compatibility review:"
             printf '%s\n' "$legacy_env_refs"
