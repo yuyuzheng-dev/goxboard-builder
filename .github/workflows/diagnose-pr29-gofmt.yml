@@ -1,0 +1,39 @@
+name: Diagnose Goxboard PR 29 gofmt
+
+on:
+  push:
+    branches:
+      - ci/gofmt-pr29-diagnostic-20261114
+
+permissions:
+  contents: read
+
+jobs:
+  gofmt-diff:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact Goxboard PR 29 commit
+        uses: actions/checkout@v5
+        with:
+          repository: yuyuzheng-dev/goxboard
+          ref: f79646f7b138b2a5553a20cdffcd9db1f763b823
+          token: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
+          persist-credentials: false
+          path: source
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: "1.27.x"
+          check-latest: true
+          cache: false
+      - name: Show exact gofmt changes only
+        working-directory: source
+        run: |
+          set -euo pipefail
+          for file in \
+            internal/db/upgrade_integration_test.go \
+            internal/db/upgrade_test.go \
+            internal/importer/xboard/run_test.go; do
+            echo "===== gofmt diff: $file ====="
+            gofmt -d "$file"
+          done
