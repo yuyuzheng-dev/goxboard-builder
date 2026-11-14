@@ -1,6 +1,6 @@
 name: Poll private goxboard
 
-# Source validation is centralized here: this poller discovers private source refs and queues builder workflows.
+# Source validation is centralized here: this poller discovers private source refs, queues builder workflows, and reports status on the source commit.
 
 on:
   push:
