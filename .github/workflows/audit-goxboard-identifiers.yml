@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v5
         with:
           repository: yuyuzheng-dev/goxboard
-          ref: main
+          ref: chore/p0-01-remove-legacy-ggboard-identifiers-20261114
           token: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
           persist-credentials: false
           path: source
@@ -26,7 +26,7 @@ jobs:
         run: |
           set -uo pipefail
           echo "Source HEAD: $(git rev-parse HEAD)"
-          if git grep -n -I -i -E 'ggboard|ggboard_|ggboardpayment|ggboardbinding|ggboard/btcpay/v1|gg[[:space:]%20]+bond' -- . > /tmp/legacy-hits.txt; then
+          if git grep -n -I -i -E 'ggboard' -- . > /tmp/legacy-hits.txt; then
             echo "===== LEGACY IDENTIFIER HITS ====="
             cat /tmp/legacy-hits.txt
             echo "===== HIT SUMMARY ====="
