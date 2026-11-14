@@ -92,6 +92,7 @@ jobs:
             }
 
             const candidates = new Map();
+            const releaseCandidates = [];
             function addCandidate(sha, ref, kind, prNumber) {
               if (!sha) return;
               const existing = candidates.get(sha) || {
@@ -111,6 +112,9 @@ jobs:
             if (manualRef) {
               const commit = await sourceApi(base + '/commits/' + encodeURIComponent(manualRef));
               addCandidate(commit.sha, manualRef, 'manual', '');
+              const manualTag = manualRef.startsWith('refs/tags/') ? manualRef.slice('refs/tags/'.length) :
+                (/^v\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?$/.test(manualRef) ? manualRef : '');
+              if (manualTag) releaseCandidates.push({ tag: manualTag, sha: commit.sha });
             } else {
               const recentCutoff = Date.now() - 15 * 60 * 1000;
               const branches = await listAll(base + '/branches');
@@ -141,6 +145,27 @@ jobs:
                 }
                 addCandidate(pr.head.sha, pr.head.ref, 'pull_request', pr.number);
               }
+
+              // New v* tags are built and published here, never by workflows in the source repository.
+              const tags = await listAll(base + '/tags');
+              for (const tag of tags) {
+                if (!/^v\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?$/.test(tag.name)) continue;
+                const commit = await sourceApi(base + '/commits/' + tag.commit.sha);
+                let taggedAt = '';
+                try {
+                  const tagRef = await sourceApi(base + '/git/ref/tags/' + encodeURIComponent(tag.name));
+                  if (tagRef.object?.type === 'tag') {
+                    const tagObject = await sourceApi(base + '/git/tags/' + tagRef.object.sha);
+                    taggedAt = tagObject.tagger?.date || '';
+                  }
+                } catch (error) {
+                  core.warning('Could not resolve tagger date for ' + tag.name + ': ' + error.message);
+                }
+                const createdAt = Date.parse(taggedAt || commit.commit?.committer?.date || commit.commit?.author?.date || '');
+                if (!Number.isFinite(createdAt) || createdAt < recentCutoff) continue;
+                addCandidate(commit.sha, tag.name, 'tag', '');
+                releaseCandidates.push({ tag: tag.name, sha: commit.sha });
+              }
             }
 
             const force = process.env.FORCE === 'true';
@@ -148,6 +173,8 @@ jobs:
             let skipped = 0;
             const targetUrl = context.serverUrl + '/' + context.repo.owner + '/' + context.repo.repo +
               '/actions/workflows/build-private.yml';
+            const releaseTargetUrl = context.serverUrl + '/' + context.repo.owner + '/' + context.repo.repo +
+              '/actions/workflows/release-private.yml';
 
             for (const candidate of candidates.values()) {
               const statuses = await sourceApi(base + '/commits/' + candidate.sha + '/statuses?per_page=100');
@@ -204,4 +231,68 @@ jobs:
               }
             }
 
-            core.info('Queued ' + queued + ' build(s); skipped ' + skipped + ' already-checked commit(s).');
+            let releasesQueued = 0;
+            let releasesSkipped = 0;
+            for (const candidate of releaseCandidates) {
+              const statuses = await sourceApi(base + '/commits/' + candidate.sha + '/statuses?per_page=100');
+              const ciStatus = statuses
+                .filter(status => status.context === 'goxboard-builder/ci')
+                .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))[0];
+              if (!ciStatus || ciStatus.state !== 'success') {
+                releasesSkipped++;
+                core.info('Waiting for successful CI before releasing ' + candidate.tag + ' at ' + candidate.sha);
+                continue;
+              }
+
+              const previous = statuses
+                .filter(status => status.context === 'goxboard-builder/release')
+                .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))[0];
+              if (previous && !force) {
+                const pendingAge = Date.now() - Date.parse(previous.created_at);
+                if (previous.state !== 'pending' || pendingAge < 45 * 60 * 1000) {
+                  releasesSkipped++;
+                  continue;
+                }
+              }
+
+              await sourceApi(base + '/statuses/' + candidate.sha, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  state: 'pending',
+                  context: 'goxboard-builder/release',
+                  description: 'Queued for release binaries and GHCR image',
+                  target_url: releaseTargetUrl
+                })
+              });
+
+              try {
+                await github.rest.actions.createWorkflowDispatch({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  workflow_id: 'release-private.yml',
+                  ref: 'main',
+                  inputs: {
+                    tag: candidate.tag,
+                    sha: candidate.sha
+                  }
+                });
+                releasesQueued++;
+                core.info('Queued release ' + candidate.tag + ' at ' + candidate.sha);
+              } catch (error) {
+                await sourceApi(base + '/statuses/' + candidate.sha, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    state: 'failure',
+                    context: 'goxboard-builder/release',
+                    description: 'Release workflow dispatch failed',
+                    target_url: releaseTargetUrl
+                  })
+                });
+                throw error;
+              }
+            }
+
+            core.info('Queued ' + queued + ' CI build(s), skipped ' + skipped + ' checked commit(s); queued ' +
+              releasesQueued + ' release(s), skipped ' + releasesSkipped + ' release(s).');
