@@ -104,9 +104,18 @@ jobs:
             echo "::error::legacy product or build identifier remains in active source/configuration"
             exit 1
           fi
-          echo "Legacy database, service, and volume identifiers are intentionally retained for data compatibility (see docs/DEPLOY.md)."
-          git grep -n -E 'ggboard\.db|ggboard_(postgres|data)|ggboard' -- deploy docs | head -n 40 || true
-
+      - name: Verify Goxboard persistence identity namespaces
+        working-directory: source
+        shell: bash
+        run: |
+          set -euo pipefail
+          legacy_identity_hits="$(git grep -n -E 'ggboard\\.db|ggboard/mfa/totp-secret/v1|ggboard/subscription/age-identity/v1|ggboard:totp:|ggboard:age:|ggboard-backup-code:|iss:[[:space:]]*"ggboard"|Issuer[[:space:]]*=[[:space:]]*"ggboard"' -- . || true)"
+          if [[ -n "$legacy_identity_hits" ]]; then
+            printf '%s\\n' "$legacy_identity_hits"
+            echo "::error::legacy ggboard SQLite/JWT/cryptographic identity namespace remains"
+            exit 1
+          fi
+          echo "SQLite, JWT, TOTP, AGE, and backup-code namespaces use Goxboard."
       - name: Report legacy environment aliases
         working-directory: source
         shell: bash
