@@ -1,6 +1,7 @@
 name: Poll private goxboard
 
 # Source validation is centralized here: a push to this file, the schedule, or manual dispatch discovers private source refs, queues Builder workflows, reports status on source commits, and verifies gofmt, Go build/vet/vulnerability/Race checks, PostgreSQL/MySQL integration, Web and Docker smoke tests, Goxboard-only retired-table cleanup, Xboard source-snapshot protection, and importer report/log secret redaction. A workflow-file push is also the immediate revalidation trigger for updated source PR heads.
+# A push to this workflow also revalidates the latest open source PR heads after code-only branch updates.
 
 on:
   push:
