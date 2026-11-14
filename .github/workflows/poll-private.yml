@@ -297,3 +297,5 @@ jobs:
 
             core.info('Queued ' + queued + ' CI build(s), skipped ' + skipped + ' checked commit(s); queued ' +
               releasesQueued + ' release(s), skipped ' + releasesSkipped + ' release(s).');
+
+# Revalidation cycle: source PR branch commits are picked up by the next poller run.
