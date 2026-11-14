@@ -109,9 +109,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          legacy_identity_hits="$(git grep -n -E 'ggboard\\.db|ggboard/mfa/totp-secret/v1|ggboard/subscription/age-identity/v1|ggboard:totp:|ggboard:age:|ggboard-backup-code:|iss:[[:space:]]*"ggboard"|Issuer[[:space:]]*=[[:space:]]*"ggboard"' -- . || true)"
+          legacy_identity_hits="$(git grep -n -E 'ggboard\.db|ggboard/mfa/totp-secret/v1|ggboard/subscription/age-identity/v1|ggboard:totp:|ggboard:age:|ggboard-backup-code:|iss:[[:space:]]*"ggboard"|Issuer[[:space:]]*=[[:space:]]*"ggboard"' -- . || true)"
           if [[ -n "$legacy_identity_hits" ]]; then
-            printf '%s\\n' "$legacy_identity_hits"
+            printf '%s\n' "$legacy_identity_hits"
             echo "::error::legacy ggboard SQLite/JWT/cryptographic identity namespace remains"
             exit 1
           fi
