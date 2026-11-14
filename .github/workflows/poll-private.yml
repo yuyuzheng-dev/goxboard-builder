@@ -1,6 +1,6 @@
 name: Poll private goxboard
 
-# One-off CI rerun after gofmt-only fix for Goxboard PR #29; no workflow behavior changes.
+# One-off Builder discovery trigger for Goxboard P0-01 PR #30; no workflow behavior changes.
 
 # Source validation is centralized here: this poller discovers private source refs, queues builder workflows, reports status on the source commit, and verifies the repository-wide Go import migration, active branding scan, compatibility aliases, and tag-to-release handoff on the final squashed source revision with corrected GeoIP/Alipay tests and PostgreSQL/MySQL age-key, importer, and database migration integration suites.
 
