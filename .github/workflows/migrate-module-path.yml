@@ -1,4 +1,4 @@
-name: Audit Go module imports
+name: Audit Go module imports (final verification)
 
 on:
   push:
