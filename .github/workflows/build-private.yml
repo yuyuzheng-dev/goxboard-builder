@@ -100,7 +100,7 @@ jobs:
           set -euo pipefail
           legacy_hits="$(git grep -n -E 'GG Bond|GG%20Bond|github.com/linusxiong/(ggboard|goxboard)|ggboard:ci|cmd/ggboard' -- cmd internal web deploy Makefile go.mod | grep -viE 'original.*GG Bond' || true)"
           if [[ -n "$legacy_hits" ]]; then
-            printf '%s\\n' "$legacy_hits"
+            printf '%s\n' "$legacy_hits"
             echo "::error::legacy product or build identifier remains in active source/configuration"
             exit 1
           fi
