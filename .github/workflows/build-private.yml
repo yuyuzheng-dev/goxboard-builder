@@ -93,32 +93,50 @@ jobs:
             exit 1
           fi
 
-      - name: Scan residual legacy product and build names
+      - name: Reject legacy project identifiers across the repository
         working-directory: source
         shell: bash
         run: |
           set -euo pipefail
-          legacy_hits="$(git grep -n -E 'GG Bond|GG%20Bond|github.com/linusxiong/(ggboard|goxboard)|ggboard:ci|cmd/ggboard' -- cmd internal web deploy Makefile go.mod | grep -viE 'original.*GG Bond' || true)"
+          legacy_hits="$(git grep -n -I -i -E 'ggboard' -- . || true)"
           if [[ -n "$legacy_hits" ]]; then
             printf '%s\n' "$legacy_hits"
-            echo "::error::legacy product or build identifier remains in active source/configuration"
+            echo "::error::legacy pre-Goxboard identifiers remain in tracked source, tests, configuration, deployment or documentation"
             exit 1
           fi
-          echo "Legacy database, service, and volume identifiers are intentionally retained for data compatibility (see docs/DEPLOY.md)."
-          git grep -n -E 'ggboard\.db|ggboard_(postgres|data)|ggboard' -- deploy docs | head -n 40 || true
+          legacy_paths="$(git ls-files | grep -i -E 'ggboard' || true)"
+          if [[ -n "$legacy_paths" ]]; then
+            printf 'Legacy identifier in tracked path(s):\n%s\n' "$legacy_paths"
+            echo "::error::legacy project identifiers remain in tracked file paths"
+            exit 1
+          fi
+          echo "No legacy project identifiers remain in tracked file contents or paths."
+          echo "Coverage includes PostgreSQL/MySQL usernames and database names, Docker volumes, SQLite files, BTCPay metadata, CLI output, tests, documentation and tracked paths."
 
-      - name: Report legacy environment aliases
+      - name: Verify Goxboard persistence identity namespaces
         working-directory: source
         shell: bash
         run: |
           set -euo pipefail
-          legacy_env_refs="$(git grep -n 'GGBOARD_' -- .env.example cmd internal web deploy Makefile || true)"
-          if [[ -n "$legacy_env_refs" ]]; then
-            echo "::notice::Legacy GGBOARD_ references remain for compatibility review:"
-            printf '%s\n' "$legacy_env_refs"
-          else
-            echo "No legacy GGBOARD_ environment names remain in active code or build configuration."
+          legacy_identity_hits="$(git grep -n -E 'ggboard\.db|ggboard/mfa/totp-secret/v1|ggboard/subscription/age-identity/v1|ggboard:totp:|ggboard:age:|ggboard-backup-code:|iss:[[:space:]]*"ggboard"|Issuer[[:space:]]*=[[:space:]]*"ggboard"' -- . || true)"
+          if [[ -n "$legacy_identity_hits" ]]; then
+            printf '%s\n' "$legacy_identity_hits"
+            echo "::error::legacy ggboard SQLite/JWT/cryptographic identity namespace remains"
+            exit 1
           fi
+          echo "SQLite, JWT, TOTP, AGE, and backup-code namespaces use Goxboard."
+      - name: Reject legacy environment variable prefixes
+        working-directory: source
+        shell: bash
+        run: |
+          set -euo pipefail
+          legacy_env_refs="$(git grep -n -I -i -E 'GGBOARD_' -- . || true)"
+          if [[ -n "$legacy_env_refs" ]]; then
+            printf '%s\n' "$legacy_env_refs"
+            echo "::error::legacy environment variable prefixes are not supported"
+            exit 1
+          fi
+          echo "No legacy environment variable prefixes remain."
 
       - name: Set up Go
         uses: actions/setup-go@v6
