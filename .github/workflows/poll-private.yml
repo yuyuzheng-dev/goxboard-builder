@@ -113,7 +113,7 @@ jobs:
               const commit = await sourceApi(base + '/commits/' + encodeURIComponent(manualRef));
               addCandidate(commit.sha, manualRef, 'manual', '');
               const manualTag = manualRef.startsWith('refs/tags/') ? manualRef.slice('refs/tags/'.length) :
-                (/^v\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?$/.test(manualRef) ? manualRef : '');
+                (/^v\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(manualRef) ? manualRef : '');
               if (manualTag) releaseCandidates.push({ tag: manualTag, sha: commit.sha });
             } else {
               const recentCutoff = Date.now() - 15 * 60 * 1000;
@@ -149,7 +149,7 @@ jobs:
               // New v* tags are built and published here, never by workflows in the source repository.
               const tags = await listAll(base + '/tags');
               for (const tag of tags) {
-                if (!/^v\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?$/.test(tag.name)) continue;
+                if (!/^v\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(tag.name)) continue;
                 const commit = await sourceApi(base + '/commits/' + tag.commit.sha);
                 let taggedAt = '';
                 try {
