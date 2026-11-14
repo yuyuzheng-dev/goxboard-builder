@@ -1,0 +1,351 @@
+name: Release private Goxboard
+
+# Pushing a tag vX.Y.Z (or vX.Y.Z-rc.1) publishes that version:
+#   - binaries for linux/amd64, linux/arm64, darwin/amd64, darwin/arm64 and windows/amd64 with the frontend embedded:
+#     goxboard_<version>_<os>_<arch>.tar.gz (.zip for windows) and SHA256SUMS;
+#   - the multi-arch image ghcr.io/<owner>/<repo>:<version> (plus X.Y, X and latest for a stable tag) via docker-private.yml;
+#   - a GitHub release for the tag whose notes are the "## [<version>]" section of CHANGELOG.md (English) followed by
+#     the same section of CHANGELOG.zh-CN.md (Chinese). A tag with a pre-release suffix (anything after "-") becomes a
+#     pre-release and never moves `latest`.
+# <version> is the tag without its "v". The binaries and the image both report the tag itself, as `make build` does on
+# a tagged checkout: `goxboard version` -> "goxboard vX.Y.Z (go1.27.x linux/amd64)".
+#
+# Re-run: Actions -> Release -> Run workflow with an existing tag. It uses the workflow file of the branch it is run
+# from (so a fix on main applies to an old tag) but builds the tag's code and reads the tag's changelogs, then replaces
+# the release's notes and assets. To fix only the notes, edit the release on GitHub instead.
+# Release order: put the section into CHANGELOG.md and CHANGELOG.zh-CN.md, merge, tag that commit, push the tag.
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing source tag to release, e.g. v1.0.0
+        type: string
+        required: true
+      sha:
+        description: Exact source commit SHA for this tag
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+# One run per tag; queue instead of cancelling so a half-uploaded release is never cut short.
+concurrency:
+  group: release-${{ inputs.tag }}
+  cancel-in-progress: false
+
+jobs:
+  # Cheap checks first, so a bad tag or a missing CHANGELOG section fails before any image is pushed.
+  prepare:
+    name: Tag and release notes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+      version: ${{ steps.tag.outputs.version }}
+      prerelease: ${{ steps.tag.outputs.prerelease }}
+      notes: ${{ steps.notes.outputs.notes }}
+      zh: ${{ steps.notes.outputs.zh }}
+      sha: ${{ steps.source.outputs.sha }}
+    steps:
+      # Expressions are passed in through env, never interpolated into the script.
+      - name: Resolve the tag
+        id: tag
+        env:
+          TAG: ${{ inputs.tag }}
+        run: |
+          set -euo pipefail
+          # What docker-private.yml treats as semver (minus its optional "v"), so the image gets X.Y.Z, X.Y, X and latest.
+          re='^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?$'
+          if [[ ! "$TAG" =~ $re ]]; then
+            echo "::error::'$TAG' is not a release tag: expected vMAJOR.MINOR.PATCH or vMAJOR.MINOR.PATCH-PRERELEASE"
+            exit 1
+          fi
+          prerelease=false
+          if [[ -n "${BASH_REMATCH[4]}" ]]; then
+            prerelease=true
+          fi
+          {
+            echo "tag=$TAG"
+            echo "version=${TAG#v}"
+            echo "prerelease=$prerelease"
+          } >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@v7
+        with:
+          repository: yuyuzheng-dev/goxboard
+          ref: refs/tags/${{ steps.tag.outputs.tag }}
+          token: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
+          path: source
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify exact source commit
+        id: source
+        env:
+          EXPECTED_SHA: ${{ inputs.sha }}
+        run: |
+          set -euo pipefail
+          actual="$(git -C source rev-parse HEAD)"
+          if [[ "$actual" != "$EXPECTED_SHA" ]]; then
+            echo "::error::tag resolved to $actual, expected $EXPECTED_SHA"
+            exit 1
+          fi
+          echo "sha=$actual" >> "$GITHUB_OUTPUT"
+
+      # A section is the lines after its "## [X.Y.Z] - date" heading, up to the next "## " heading or the link
+      # definitions at the end of the file, without leading blank lines. The notes are the CHANGELOG.md section, then the
+      # CHANGELOG.zh-CN.md one under "## 简体中文". Tags from before the split (v1.0.1 and older) have no
+      # CHANGELOG.zh-CN.md; their CHANGELOG.md is bilingual and is used alone.
+      - name: Release notes from CHANGELOG.md and CHANGELOG.zh-CN.md
+        id: notes
+        env:
+          VERSION: ${{ steps.tag.outputs.version }}
+        working-directory: source
+        run: |
+          set -euo pipefail
+          section() {
+            awk -v heading="## [$VERSION]" '
+              /^## / { if (found) exit; found = index($0, heading) == 1; next }
+              /^\[.*\]: / { if (found) exit }
+              found
+            ' "$1" | sed '/./,$!d'
+          }
+          notes="$(section CHANGELOG.md)"
+          if [[ -z "$notes" ]]; then
+            echo "::error file=CHANGELOG.md::CHANGELOG.md has no non-empty '## [$VERSION]' section; add one (Keep a Changelog format), then tag again or re-run"
+            exit 1
+          fi
+          zh=false
+          if [[ -f CHANGELOG.zh-CN.md ]]; then
+            zh=true
+            notes_zh="$(section CHANGELOG.zh-CN.md)"
+            if [[ -z "$notes_zh" ]]; then
+              echo "::error file=CHANGELOG.zh-CN.md::CHANGELOG.zh-CN.md has no non-empty '## [$VERSION]' section; add the Chinese version of the CHANGELOG.md section, then tag again or re-run"
+              exit 1
+            fi
+            notes="$(printf '%s\n\n## 简体中文\n\n%s' "$notes" "$notes_zh")"
+          fi
+          delim="NOTES_$(openssl rand -hex 16)"
+          {
+            echo "zh=$zh"
+            echo "notes<<$delim"
+            printf '%s\n' "$notes"
+            echo "$delim"
+          } >> "$GITHUB_OUTPUT"
+          {
+            echo "### Release notes for $VERSION"
+            echo
+            printf '%s\n' "$notes"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  binaries:
+    name: Binaries
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          repository: yuyuzheng-dev/goxboard
+          ref: refs/tags/${{ needs.prepare.outputs.tag }}
+          token: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
+          path: source
+          fetch-depth: 0
+          persist-credentials: false
+
+      # Same toolchains as ci.yml; Go is the latest 1.27 patch, like the image's golang:1.27-alpine.
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: source/web/pnpm-lock.yaml
+      - uses: actions/setup-go@v6
+        with:
+          go-version: "1.27.x"
+          check-latest: true
+          cache: true
+
+      # Built once and embedded into every target. `make web` builds web/ and copies web/dist into internal/static/dist.
+      # The build prerenders the public pages with the runner's Google Chrome (the image does it with Chromium) and only
+      # warns when it finds no browser, so a dist without spa.html or login/index.html stops the release here.
+      - name: Build the frontend
+        working-directory: source
+        run: |
+          set -euo pipefail
+          pnpm -C web install --frozen-lockfile
+          make web
+          for f in index.html spa.html login/index.html; do
+            if [[ ! -s "internal/static/dist/$f" ]]; then
+              echo "::error::internal/static/dist/$f is missing: the frontend build or its prerender did not run"
+              exit 1
+            fi
+          done
+
+      # Each archive holds one directory, goxboard_<version>_<os>_<arch>/, with the binary, LICENSE, README.md,
+      # README.zh-CN.md, config.example.yaml and, for linux, the systemd unit. Files are owned by root (0) in the
+      # archive, so extracting as root never leaves the runner's uid behind.
+      - name: Build and package
+        working-directory: source
+        env:
+          TAG: ${{ needs.prepare.outputs.tag }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/dist" stage="$RUNNER_TEMP/stage"
+          rm -rf "$out" "$stage"
+          mkdir -p "$out" "$stage"
+          for target in linux/amd64 linux/arm64 darwin/amd64 darwin/arm64 windows/amd64; do
+            goos="${target%/*}" goarch="${target#*/}"
+            name="goxboard_${VERSION}_${goos}_${goarch}"
+            exe=goxboard
+            if [[ "$goos" == windows ]]; then
+              exe=goxboard.exe
+            fi
+            mkdir "$stage/$name"
+            # Same flags as deploy/Dockerfile and `make build`. The SQLite driver is pure Go, so CGO stays off everywhere.
+            CGO_ENABLED=0 GOOS="$goos" GOARCH="$goarch" \
+              go build -trimpath -ldflags "-s -w -X main.version=$TAG" -o "$stage/$name/$exe" ./cmd/goxboard
+            cp LICENSE README.md README.zh-CN.md "$stage/$name/"
+            if [[ -f config.example.yaml ]]; then
+              cp config.example.yaml "$stage/$name/"
+            fi
+            if [[ "$goos" == linux ]]; then
+              cp deploy/goxboard.service "$stage/$name/"
+            fi
+            if [[ "$goos" == windows ]]; then
+              (cd "$stage" && zip -qrX "$out/$name.zip" "$name")
+            else
+              tar -C "$stage" --owner=0 --group=0 --numeric-owner -czf "$out/$name.tar.gz" "$name"
+            fi
+          done
+          (cd "$out" && sha256sum goxboard_* > SHA256SUMS && cat SHA256SUMS)
+          ls -l "$out"
+
+      - name: Check the version the runner's own binary reports
+        env:
+          TAG: ${{ needs.prepare.outputs.tag }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          set -euo pipefail
+          bin="$RUNNER_TEMP/stage/goxboard_${VERSION}_$(go env GOOS)_$(go env GOARCH)/goxboard"
+          got="$("$bin" version)"
+          echo "$got"
+          if ! grep -qF "goxboard $TAG " <<<"$got"; then
+            echo "::error::the binary does not report version $TAG"
+            exit 1
+          fi
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release-assets
+          path: ${{ runner.temp }}/dist/
+          if-no-files-found: error
+          retention-days: 7
+
+  # docker-private.yml builds, pushes and verifies the image. `ref` makes it build the tag even when this run was started by
+  # hand from main. A called workflow can only narrow the token, so the packages permission is granted here.
+  docker:
+    name: Docker image
+    needs: prepare
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/docker-private.yml
+    with:
+      push: true
+      platforms: linux/amd64,linux/arm64
+      no_cache: false
+      ref: refs/tags/${{ needs.prepare.outputs.tag }}
+
+  # Last, so a release only appears once its binaries and image both exist.
+  release:
+    name: GitHub release
+    needs: [prepare, binaries, docker]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write # create the release and upload its assets
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: release-assets
+          path: dist
+
+      - name: Create or update the release
+        env:
+          GH_TOKEN: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
+          GH_REPO: yuyuzheng-dev/goxboard
+          TAG: ${{ needs.prepare.outputs.tag }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+          PRERELEASE: ${{ needs.prepare.outputs.prerelease }}
+          NOTES: ${{ needs.prepare.outputs.notes }}
+          ZH: ${{ needs.prepare.outputs.zh }}
+        run: |
+          set -euo pipefail
+          cd dist
+          sha256sum -c SHA256SUMS # every archive that was built arrived, unchanged
+          assets=(goxboard_* SHA256SUMS)
+
+          notes="$RUNNER_TEMP/notes.md"
+          {
+            printf '%s\n' "$NOTES"
+            echo
+            echo "---"
+            echo
+            docs="https://github.com/$GH_REPO/blob/$TAG/docs"
+            if [[ "$ZH" == true ]]; then
+              echo "- Docker: \`docker pull ghcr.io/${GH_REPO,,}:$VERSION\` (linux/amd64, linux/arm64)"
+              echo "- Binaries: download the archive for your platform and check it with \`sha256sum --ignore-missing -c SHA256SUMS\`. Installation: [docs/DEPLOY.md]($docs/DEPLOY.md) · [简体中文]($docs/DEPLOY.zh-CN.md)"
+            else
+              echo "- Docker：\`docker pull ghcr.io/${GH_REPO,,}:$VERSION\`（linux/amd64、linux/arm64）"
+              echo "- 二进制 / Binaries：下载对应平台的压缩包，用 \`sha256sum --ignore-missing -c SHA256SUMS\` 校验；安装见 [docs/DEPLOY.md]($docs/DEPLOY.md)"
+            fi
+          } > "$notes"
+
+          if gh release view "$TAG" --repo "$GH_REPO" >/dev/null 2>&1; then
+            # A re-run, or a draft left behind by a failed upload: replace assets and notes, and make sure it is published.
+            gh release upload "$TAG" "${assets[@]}" --clobber --repo "$GH_REPO"
+            gh release edit "$TAG" --title "$TAG" --notes-file "$notes" --prerelease="$PRERELEASE" --draft=false --repo "$GH_REPO"
+          else
+            # With assets, gh creates the release as a draft and publishes it after the last upload.
+            gh release create "$TAG" "${assets[@]}" --verify-tag --title "$TAG" --notes-file "$notes" \
+              --prerelease="$PRERELEASE" --repo "$GH_REPO"
+          fi
+
+          url="$(gh release view "$TAG" --repo "$GH_REPO" --json url --jq .url)"
+          {
+            echo "### Release published"
+            echo
+            echo "- Release: $url"
+            echo "- Pre-release: \`$PRERELEASE\`"
+            echo "- Image: \`ghcr.io/${GH_REPO,,}:$VERSION\`"
+            echo "- Assets:"
+            for a in "${assets[@]}"; do echo "  - \`$a\`"; done
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  report:
+    name: Report release status to source commit
+    if: always()
+    needs: [prepare, binaries, docker, release]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish release status
+        uses: actions/github-script@v9
+        with:
+          github-token: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
+          script: |
+            const results = [${{ toJSON(needs.prepare.result) }}, ${{ toJSON(needs.binaries.result) }}, ${{ toJSON(needs.docker.result) }}, ${{ toJSON(needs.release.result) }}];
+            const success = results.every(result => result === "success");
+            await github.rest.repos.createCommitStatus({
+              owner: "yuyuzheng-dev",
+              repo: "goxboard",
+              sha: context.payload.inputs.sha,
+              state: success ? "success" : "failure",
+              context: "goxboard-builder/release",
+              description: success ? "Release assets and image published" : "Release build or publishing failed",
+              target_url: `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+            });
