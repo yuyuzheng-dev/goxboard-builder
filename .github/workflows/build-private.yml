@@ -103,7 +103,7 @@ jobs:
             exit 1
           fi
           echo "Legacy database, service, and volume identifiers are intentionally retained for data compatibility (see docs/DEPLOY.md)."
-          git grep -n -E 'ggboard\\.db|ggboard_(postgres|data)|ggboard' -- deploy docs | head -n 40 || true
+          git grep -n -E 'ggboard\.db|ggboard_(postgres|data)|ggboard' -- deploy docs | head -n 40 || true
 
       - name: Set up Go
         uses: actions/setup-go@v6
