@@ -1,4 +1,4 @@
-name: Audit Goxboard legacy identifiers
+name: Audit Goxboard legacy identifiers after P0-01 documentation cleanup
 
 on:
   push:
