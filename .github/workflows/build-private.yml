@@ -104,8 +104,14 @@ jobs:
             echo "::error::legacy pre-Goxboard identifiers remain in tracked source, tests, configuration, deployment or documentation"
             exit 1
           fi
-          echo "No legacy project identifiers remain in tracked source files."
-          echo "Coverage includes PostgreSQL/MySQL usernames and database names, Docker volumes, SQLite files, BTCPay metadata, CLI output, tests and documentation."
+          legacy_paths="$(git ls-files | grep -i -E 'ggboard' || true)"
+          if [[ -n "$legacy_paths" ]]; then
+            printf 'Legacy identifier in tracked path(s):\\n%s\\n' "$legacy_paths"
+            echo "::error::legacy project identifiers remain in tracked file paths"
+            exit 1
+          fi
+          echo "No legacy project identifiers remain in tracked file contents or paths."
+          echo "Coverage includes PostgreSQL/MySQL usernames and database names, Docker volumes, SQLite files, BTCPay metadata, CLI output, tests, documentation and tracked paths."
 
       - name: Verify Goxboard persistence identity namespaces
         working-directory: source
