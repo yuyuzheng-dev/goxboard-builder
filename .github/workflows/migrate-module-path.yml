@@ -1,0 +1,73 @@
+name: Migrate Go module imports
+
+on:
+  push:
+    paths:
+      - .github/workflows/migrate-module-path.yml
+  workflow_dispatch:
+    inputs:
+      source_ref:
+        description: Private goxboard source branch to update
+        required: true
+        default: refactor/rename-goxboard-20261114
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  migrate:
+    name: Replace legacy Go imports in private source
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout private source
+        uses: actions/checkout@v5
+        with:
+          repository: yuyuzheng-dev/goxboard
+          ref: ${{ inputs.source_ref || 'refactor/rename-goxboard-20261114' }}
+          token: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
+          path: source
+
+      - name: Replace every legacy Go module import
+        working-directory: source
+        shell: bash
+        env:
+          SOURCE_REF: ${{ inputs.source_ref || 'refactor/rename-goxboard-20261114' }}
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git grep -I -l -z \
+            -e 'github.com/linusxiong/ggboard' \
+            -e 'github.com/linusxiong/goxboard' \
+            -- '*.go' > "$RUNNER_TEMP/legacy-go-files" || true
+          xargs -0 -r sed -i \
+            -e 's#github.com/linusxiong/ggboard/#github.com/yuyuzheng-dev/goxboard/#g' \
+            -e 's#github.com/linusxiong/goxboard/#github.com/yuyuzheng-dev/goxboard/#g' \
+            < "$RUNNER_TEMP/legacy-go-files"
+
+          sed -i \
+            's#^module github.com/linusxiong/ggboard$#module github.com/yuyuzheng-dev/goxboard#' \
+            go.mod
+
+          mapfile -d '' changed_go < <(git diff --name-only -z -- '*.go')
+          if (( ${#changed_go[@]} )); then
+            gofmt -w "${changed_go[@]}"
+          fi
+
+          if git grep -n -E 'github.com/linusxiong/(ggboard|goxboard)' -- '*.go' go.mod; then
+            echo "::error::legacy Go module import path remains"
+            exit 1
+          fi
+
+          if git diff --quiet; then
+            echo "No legacy Go module imports remain; no commit is needed."
+            exit 0
+          fi
+
+          git add -- '*.go' go.mod
+          git commit -m "fix: replace all legacy Go module imports"
+          git push origin "HEAD:$SOURCE_REF"
