@@ -45,8 +45,8 @@ jobs:
             -e 'github.com/linusxiong/goxboard' \
             -- '*.go' > "$RUNNER_TEMP/legacy-go-files" || true
           xargs -0 -r sed -i \
-            -e 's#github.com/linusxiong/ggboard/#github.com/yuyuzheng-dev/goxboard/#g' \
-            -e 's#github.com/linusxiong/goxboard/#github.com/yuyuzheng-dev/goxboard/#g' \
+            -e 's#github.com/linusxiong/ggboard#github.com/yuyuzheng-dev/goxboard#g' \
+            -e 's#github.com/linusxiong/goxboard#github.com/yuyuzheng-dev/goxboard#g' \
             < "$RUNNER_TEMP/legacy-go-files"
 
           sed -i \
