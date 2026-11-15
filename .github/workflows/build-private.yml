@@ -172,7 +172,7 @@ jobs:
 
       - name: PostgreSQL/MySQL migration integration tests
         working-directory: source
-        run: go test -tags integration -run Integration ./internal/db/ ./internal/importer/xboard/ ./internal/subscription/guard/
+        run: go test -tags integration -run Integration ./internal/db/ ./internal/importer/xboard/ ./internal/subscription/guard/ ./internal/app/traffic/
 
   web:
     name: Web (install, audit, lint, typecheck, test, build)
