@@ -112,6 +112,7 @@ jobs:
           LH_PRESET=mobile pnpm exec lhci autorun --config=./lighthouserc.cjs
 
       - name: Build Goxboard server and benchmark tools
+        id: build
         working-directory: source
         run: |
           set -euo pipefail
@@ -129,6 +130,7 @@ jobs:
           bash source/scripts/bench/run.sh -d 10s -warmup 2s -pause 1s -out "$API_OUT" -commit "${{ steps.source.outputs.sha }}"
 
       - name: Prepare disposable PostgreSQL and MySQL databases
+        if: ${{ always() && steps.build.outcome == 'success' }}
         run: |
           set -euo pipefail
           sudo apt-get update
@@ -138,6 +140,7 @@ jobs:
           mysql -h 127.0.0.1 -uroot -ptest -e "CREATE DATABASE goxboard_bench"
 
       - name: Run database baselines
+        if: ${{ always() && steps.build.outcome == 'success' }}
         working-directory: source
         run: |
           set -euo pipefail
@@ -147,6 +150,7 @@ jobs:
           "$RUNNER_TEMP/dbbench" -driver mysql -duration 5s -concurrency 16 -out "$RUNNER_TEMP/db-perf/mysql.json"
 
       - name: Upload baseline artifacts
+        if: ${{ always() && steps.build.outcome == 'success' }}
         uses: actions/upload-artifact@v7
         with:
           name: goxboard-phase1-baseline-${{ steps.source.outputs.sha }}
@@ -155,6 +159,6 @@ jobs:
             ${{ runner.temp }}/db-perf/*
             source/web/.lighthouseci/reports/*
             ${{ runner.temp }}/golangci-full-baseline.txt
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 30
           include-hidden-files: true
