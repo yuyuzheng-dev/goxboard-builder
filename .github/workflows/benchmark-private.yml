@@ -130,6 +130,7 @@ jobs:
           bash source/scripts/bench/run.sh -d 10s -warmup 2s -pause 1s -out "$API_OUT" -commit "${{ steps.source.outputs.sha }}"
 
       - name: Prepare disposable PostgreSQL and MySQL databases
+        id: prepare
         if: ${{ always() && steps.build.outcome == 'success' }}
         run: |
           set -euo pipefail
@@ -140,7 +141,7 @@ jobs:
           mysql -h 127.0.0.1 -uroot -ptest -e "CREATE DATABASE goxboard_bench"
 
       - name: Run database baselines
-        if: ${{ always() && steps.build.outcome == 'success' }}
+        if: ${{ always() && steps.build.outcome == 'success' && steps.prepare.outcome == 'success' }}
         working-directory: source
         run: |
           set -euo pipefail
