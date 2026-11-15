@@ -305,3 +305,4 @@ jobs:
 # Revalidation cycle: test PR #36 after merging the current main head.
 # Revalidation cycle: run PR #37 traffic report idempotency, ambiguous-commit, and SQL-dialect tests.
 # Revalidation cycle: build PR #37 latest head abd7265a7ab362fce6540db71a962eb6fa1ab117 after the internal test DB fixture fix.
+# Revalidation cycle: build PR #37 latest head 1666c8017970f1058f25f3b5c8412caa9949ed66 after reserving node ID zero for internal receipts.
