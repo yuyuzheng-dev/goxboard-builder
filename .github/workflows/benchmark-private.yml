@@ -50,7 +50,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: yuyuzheng-dev/goxboard
-          ref: ${{ github.event.inputs.source_sha || 'a8601bf299331532bdb5afa2df1aad6136728a21' }}
+          ref: ${{ github.event.inputs.source_sha || '7eec98d630167378dfffa24b68240a93796dc9c0' }}
           token: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
           persist-credentials: false
           path: source
