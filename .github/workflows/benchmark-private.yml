@@ -126,7 +126,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "$API_OUT"
-          source/scripts/bench/run.sh -d 10s -warmup 2s -pause 1s -out "$API_OUT" -commit "${{ steps.source.outputs.sha }}"
+          bash source/scripts/bench/run.sh -d 10s -warmup 2s -pause 1s -out "$API_OUT" -commit "${{ steps.source.outputs.sha }}"
 
       - name: Prepare disposable PostgreSQL and MySQL databases
         run: |
