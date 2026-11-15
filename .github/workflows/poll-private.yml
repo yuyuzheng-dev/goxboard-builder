@@ -311,3 +311,4 @@ jobs:
 # Revalidation cycle: build PR #38 latest head 98928398cca3e0fd63870ef4f6cb37c41b7cf25b after synchronizing queue shutdown assertions.
 # Revalidation cycle: validate PR #39 Phase 1 stability and performance baseline.
 # Revalidation cycle: test PR #39 after fixing the dynamic subscription query delimiter in the benchmark harness.
+# Revalidation cycle: test PR #39 latest head after adding dialect-specific SQLite EXPLAIN QUERY PLAN reporting and coverage.
