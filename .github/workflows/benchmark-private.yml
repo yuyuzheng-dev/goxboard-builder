@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - perf/phase1-baseline-runner-20261115
-    paths:
-      - .github/workflows/benchmark-private.yml
   workflow_dispatch:
     inputs:
       source_sha:
