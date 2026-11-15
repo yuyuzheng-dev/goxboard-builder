@@ -121,6 +121,7 @@ jobs:
           go build -o "$RUNNER_TEMP/dbbench" ./scripts/dbbench
 
       - name: Run API baseline (SQLite)
+        id: api
         env:
           BIN: ${{ github.workspace }}/source/bin/goxboard
           API_OUT: ${{ runner.temp }}/api-perf
@@ -141,6 +142,7 @@ jobs:
           mysql -h 127.0.0.1 -uroot -ptest -e "CREATE DATABASE goxboard_bench"
 
       - name: Run database baselines
+        id: db
         if: ${{ always() && steps.build.outcome == 'success' && steps.prepare.outcome == 'success' }}
         working-directory: source
         run: |
@@ -151,6 +153,7 @@ jobs:
           "$RUNNER_TEMP/dbbench" -driver mysql -duration 5s -concurrency 16 -out "$RUNNER_TEMP/db-perf/mysql.json"
 
       - name: Upload baseline artifacts
+        id: upload
         if: ${{ always() && steps.build.outcome == 'success' }}
         uses: actions/upload-artifact@v7
         with:
@@ -163,3 +166,30 @@ jobs:
           if-no-files-found: warn
           retention-days: 30
           include-hidden-files: true
+
+      - name: Report performance baseline status
+        if: always()
+        uses: actions/github-script@v9
+        with:
+          github-token: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
+          script: |
+            const results = {
+              api: '${{ steps.api.outcome }}',
+              database: '${{ steps.db.outcome }}',
+              artifacts: '${{ steps.upload.outcome }}'
+            };
+            const passed = Object.values(results).every(result => result === 'success');
+            const targetUrl = context.serverUrl + '/' + context.repo.owner + '/' +
+              context.repo.repo + '/actions/runs/' + context.runId;
+            await github.rest.repos.createCommitStatus({
+              owner: 'yuyuzheng-dev',
+              repo: 'goxboard',
+              sha: '${{ steps.source.outputs.sha }}',
+              state: passed ? 'success' : 'failure',
+              context: 'goxboard-builder/perf-baseline',
+              description: passed
+                ? 'SQLite API and SQLite/PostgreSQL/MySQL baselines passed'
+                : 'One or more performance baseline stages failed or were skipped',
+              target_url: targetUrl
+            });
+            core.info('Performance baseline results: ' + JSON.stringify(results));
