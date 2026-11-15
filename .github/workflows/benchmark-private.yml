@@ -123,7 +123,8 @@ jobs:
           set -euo pipefail
           sudo apt-get update
           sudo apt-get install -y default-mysql-client postgresql-client
-          PGPASSWORD=test createdb -h 127.0.0.1 -U postgres goxboard_bench
+          export PGPASSWORD=test
+          createdb -h 127.0.0.1 -U postgres goxboard_bench
           mysql -h 127.0.0.1 -uroot -ptest -e "CREATE DATABASE goxboard_bench"
 
       - name: Run database baselines
