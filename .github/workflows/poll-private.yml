@@ -307,3 +307,4 @@ jobs:
 # Revalidation cycle: build PR #37 latest head abd7265a7ab362fce6540db71a962eb6fa1ab117 after the internal test DB fixture fix.
 # Revalidation cycle: build PR #37 latest head 1666c8017970f1058f25f3b5c8412caa9949ed66 after reserving node ID zero for internal receipts.
 # Revalidation cycle: build PR #37 latest head 876d65ae2e8b82dba8cce76a7192f4c3bbb1f249 after correcting the Go test declaration.
+# Revalidation cycle: build PR #37 latest head 6b96f71fb66e2640b2789dff2d8c0279b70aecb6 after gofmt field alignment correction.
