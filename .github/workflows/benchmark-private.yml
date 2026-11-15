@@ -50,7 +50,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: yuyuzheng-dev/goxboard
-          ref: ${{ github.event.inputs.source_sha || '7eec98d630167378dfffa24b68240a93796dc9c0' }}
+          ref: ${{ github.event.inputs.source_sha || 'cb190cc1f5655a972c427808b97527ef191f05dd' }}
           token: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
           persist-credentials: false
           path: source
@@ -78,9 +78,9 @@ jobs:
         working-directory: source
         run: |
           set -euo pipefail
-          "$(go env GOPATH)/bin/golangci-lint" run --max-same-issues 0 --max-issues-per-linter 0 ./scripts/dbbench
-          go test -race ./scripts/dbbench -count=1
-          go vet ./scripts/dbbench
+          "$(go env GOPATH)/bin/golangci-lint" run --max-same-issues 0 --max-issues-per-linter 0 ./scripts/dbbench ./scripts/bench
+          go test -race ./scripts/dbbench ./scripts/bench -count=1
+          go vet ./scripts/dbbench ./scripts/bench
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v6.1.1
