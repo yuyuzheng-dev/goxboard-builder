@@ -370,3 +370,4 @@ jobs:
 # Revalidation cycle: test PR #39 latest head after adding dialect-specific SQLite EXPLAIN QUERY PLAN reporting and coverage.
 # Revalidation cycle: test PR #39 latest head after making API and database benchmark stages independent.
 # Revalidation cycle: rerun PR #39 baseline after removing obsolete subscription flag overrides and using User-Agent format detection.
+# Revalidation cycle: rerun PR #39 after removing legacy flag query parameters from subscription benchmark requests.
