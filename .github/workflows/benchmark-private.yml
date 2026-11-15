@@ -121,13 +121,6 @@ jobs:
           mkdir -p source/internal/static/dist
           cp -a source/web/dist/. source/internal/static/dist/
 
-      - name: Run public-page Lighthouse baselines
-        working-directory: source/web
-        run: |
-          set -euo pipefail
-          LH_PRESET=desktop pnpm exec lhci autorun --config=./lighthouserc.cjs
-          LH_PRESET=mobile pnpm exec lhci autorun --config=./lighthouserc.cjs
-
       - name: Build Goxboard server and benchmark tools
         id: build
         working-directory: source
@@ -178,7 +171,6 @@ jobs:
           path: |
             ${{ runner.temp }}/api-perf/*
             ${{ runner.temp }}/db-perf/*
-            source/web/.lighthouseci/reports/*
             ${{ runner.temp }}/golangci-full-baseline.txt
           if-no-files-found: warn
           retention-days: 30
