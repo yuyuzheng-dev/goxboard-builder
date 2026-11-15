@@ -9,7 +9,7 @@ on:
       source_sha:
         description: Exact private Goxboard source commit SHA (defaults to the Phase 1 harness commit)
         required: false
-        default: a90e98a45715a92e4b535bf908815a77efe37106
+        default: dfd65fd971895518ead8db08447c57183ddd831d
         type: string
 
 permissions:
@@ -54,7 +54,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: yuyuzheng-dev/goxboard
-          ref: ${{ github.event.inputs.source_sha || 'a90e98a45715a92e4b535bf908815a77efe37106' }}
+          ref: ${{ github.event.inputs.source_sha || 'dfd65fd971895518ead8db08447c57183ddd831d' }}
           token: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
           persist-credentials: false
           path: source
