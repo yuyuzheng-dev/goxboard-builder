@@ -1,0 +1,133 @@
+name: Goxboard performance baseline
+
+on:
+  push:
+    branches:
+      - perf/phase1-baseline-runner-20261115
+    paths:
+      - .github/workflows/benchmark-private.yml
+  workflow_dispatch:
+    inputs:
+      source_sha:
+        description: Exact private Goxboard source commit SHA (defaults to the Phase 1 harness commit)
+        required: false
+        default: a7f7e42699f19dee5f0df1940a3764f07f72aa79
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark:
+    name: API and SQLite / PostgreSQL / MySQL baseline
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: test
+        ports: ["3306:3306"]
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -ptest"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      GOXBOARD_DB_BENCH_POSTGRES_DSN: postgres://postgres:test@127.0.0.1:5432/goxboard_bench?sslmode=disable
+      GOXBOARD_DB_BENCH_MYSQL_DSN: root:test@tcp(127.0.0.1:3306)/goxboard_bench
+    steps:
+      - name: Checkout private source at exact commit
+        uses: actions/checkout@v5
+        with:
+          repository: yuyuzheng-dev/goxboard
+          ref: ${{ github.event.inputs.source_sha || 'a7f7e42699f19dee5f0df1940a3764f07f72aa79' }}
+          token: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
+          persist-credentials: false
+          path: source
+
+      - name: Resolve source revision
+        id: source
+        working-directory: source
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: "1.27.x"
+          check-latest: true
+          cache: false
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6.1.1
+        with:
+          version: 12
+
+      - name: Set up Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Build frontend assets for the embedded server
+        run: |
+          set -euo pipefail
+          pnpm -C source/web install --frozen-lockfile
+          pnpm -C source/web build
+          mkdir -p source/internal/static/dist
+          cp -a source/web/dist/. source/internal/static/dist/
+
+      - name: Build Goxboard server and benchmark tools
+        working-directory: source
+        run: |
+          set -euo pipefail
+          mkdir -p bin
+          CGO_ENABLED=0 go build -trimpath -o bin/goxboard ./cmd/goxboard
+          go build -o "$RUNNER_TEMP/dbbench" ./scripts/dbbench
+          go build -o "$RUNNER_TEMP/apibench" ./scripts/bench
+
+      - name: Run API baseline (SQLite)
+        env:
+          BIN: ${{ github.workspace }}/source/bin/goxboard
+          API_OUT: ${{ runner.temp }}/api-perf
+        run: |
+          set -euo pipefail
+          mkdir -p "$API_OUT"
+          source/scripts/bench/run.sh -d 10s -warmup 2s -pause 1s -out "$API_OUT" -commit "${{ steps.source.outputs.sha }}"
+
+      - name: Prepare disposable PostgreSQL and MySQL databases
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y default-mysql-client postgresql-client
+          PGPASSWORD=test createdb -h 127.0.0.1 -U postgres goxboard_bench
+          mysql -h 127.0.0.1 -uroot -ptest -e "CREATE DATABASE goxboard_bench"
+
+      - name: Run database baselines
+        working-directory: source
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/db-perf"
+          "$RUNNER_TEMP/dbbench" -driver sqlite -duration 3s -concurrency 16 -out "$RUNNER_TEMP/db-perf/sqlite.json"
+          "$RUNNER_TEMP/dbbench" -driver postgres -duration 3s -concurrency 16 -out "$RUNNER_TEMP/db-perf/postgres.json"
+          "$RUNNER_TEMP/dbbench" -driver mysql -duration 3s -concurrency 16 -out "$RUNNER_TEMP/db-perf/mysql.json"
+
+      - name: Upload baseline artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: goxboard-phase1-baseline-${{ steps.source.outputs.sha }}
+          path: |
+            ${{ runner.temp }}/api-perf/*
+            ${{ runner.temp }}/db-perf/*
+          if-no-files-found: error
+          retention-days: 30
