@@ -11,7 +11,7 @@ on:
       source_sha:
         description: Exact private Goxboard source commit SHA (defaults to the Phase 1 harness commit)
         required: false
-        default: a7f7e42699f19dee5f0df1940a3764f07f72aa79
+        default: daa022f1b8d8fef6021eafcc64692733a5efe27f
         type: string
 
 permissions:
@@ -87,6 +87,13 @@ jobs:
           mkdir -p source/internal/static/dist
           cp -a source/web/dist/. source/internal/static/dist/
 
+      - name: Run public-page Lighthouse baselines
+        working-directory: source/web
+        run: |
+          set -euo pipefail
+          LH_PRESET=desktop pnpm exec lhci autorun --config=./lighthouserc.cjs
+          LH_PRESET=mobile pnpm exec lhci autorun --config=./lighthouserc.cjs
+
       - name: Build Goxboard server and benchmark tools
         working-directory: source
         run: |
@@ -129,5 +136,6 @@ jobs:
           path: |
             ${{ runner.temp }}/api-perf/*
             ${{ runner.temp }}/db-perf/*
+            source/web/.lighthouseci/reports/*
           if-no-files-found: error
           retention-days: 30
