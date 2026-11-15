@@ -149,9 +149,27 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/db-perf"
-          "$RUNNER_TEMP/dbbench" -driver sqlite -duration 5s -concurrency 16 -out "$RUNNER_TEMP/db-perf/sqlite.json"
-          "$RUNNER_TEMP/dbbench" -driver postgres -duration 5s -concurrency 16 -out "$RUNNER_TEMP/db-perf/postgres.json"
-          "$RUNNER_TEMP/dbbench" -driver mysql -duration 5s -concurrency 16 -out "$RUNNER_TEMP/db-perf/mysql.json"
+          failures=0
+          run_driver() {
+            local driver="$1"
+            local output="$2"
+            echo "::group::Database baseline: $driver"
+            if "$RUNNER_TEMP/dbbench" -driver "$driver" -duration 5s -concurrency 16 -out "$output"; then
+              echo "PASS: $driver baseline"
+            else
+              rc=$?
+              echo "::error title=$driver database baseline failed::dbbench exited with status $rc; see the JSON artifact and scenario errors"
+              failures=$((failures + 1))
+            fi
+            echo "::endgroup::"
+          }
+          run_driver sqlite "$RUNNER_TEMP/db-perf/sqlite.json"
+          run_driver postgres "$RUNNER_TEMP/db-perf/postgres.json"
+          run_driver mysql "$RUNNER_TEMP/db-perf/mysql.json"
+          if [ "$failures" -gt 0 ]; then
+            echo "::error::$failures database driver baseline(s) failed; all drivers were still attempted"
+            exit 1
+          fi
 
       - name: Upload baseline artifacts
         id: upload
