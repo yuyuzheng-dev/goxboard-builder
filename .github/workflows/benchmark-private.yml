@@ -88,13 +88,6 @@ jobs:
           check-latest: true
           cache: false
 
-      - name: Record repository-wide lint baseline
-        working-directory: source
-        run: |
-          set -euo pipefail
-          go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest
-          "$(go env GOPATH)/bin/golangci-lint" run --issues-exit-code=0 --max-same-issues 0 --max-issues-per-linter 0 ./... 2>&1 | tee "$RUNNER_TEMP/golangci-full-baseline.txt"
-
       - name: Enforce benchmark harness lint and tests
         working-directory: source
         run: |
@@ -171,7 +164,6 @@ jobs:
           path: |
             ${{ runner.temp }}/api-perf/*
             ${{ runner.temp }}/db-perf/*
-            ${{ runner.temp }}/golangci-full-baseline.txt
           if-no-files-found: warn
           retention-days: 30
           include-hidden-files: true
