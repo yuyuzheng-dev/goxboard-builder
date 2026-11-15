@@ -172,8 +172,12 @@ jobs:
             const force = process.env.FORCE === 'true';
             let queued = 0;
             let skipped = 0;
+            let perfQueued = 0;
+            let perfSkipped = 0;
             const targetUrl = context.serverUrl + '/' + context.repo.owner + '/' + context.repo.repo +
               '/actions/workflows/build-private.yml';
+            const perfTargetUrl = context.serverUrl + '/' + context.repo.owner + '/' + context.repo.repo +
+              '/actions/workflows/benchmark-private.yml';
             const releaseTargetUrl = context.serverUrl + '/' + context.repo.owner + '/' + context.repo.repo +
               '/actions/workflows/release-private.yml';
 
@@ -229,6 +233,57 @@ jobs:
                   })
                 });
                 throw error;
+              }
+
+              // PR #39 owns the Phase 1 API and database performance baseline.
+              // Keep it separate from the normal build so a failed functional
+              // test does not prevent independent database measurements.
+              if (candidate.pr_number === '39') {
+                const previousPerf = statuses
+                  .filter(status => status.context === 'goxboard-builder/perf-baseline')
+                  .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))[0];
+                if (previousPerf && !force) {
+                  const pendingAge = Date.now() - Date.parse(previousPerf.created_at);
+                  if (previousPerf.state !== 'pending' || pendingAge < 45 * 60 * 1000) {
+                    perfSkipped++;
+                    continue;
+                  }
+                }
+
+                await sourceApi(base + '/statuses/' + candidate.sha, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    state: 'pending',
+                    context: 'goxboard-builder/perf-baseline',
+                    description: 'Queued for SQLite API and database baselines',
+                    target_url: perfTargetUrl
+                  })
+                });
+
+                try {
+                  await github.rest.actions.createWorkflowDispatch({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    workflow_id: 'benchmark-private.yml',
+                    ref: 'main',
+                    inputs: { source_sha: candidate.sha }
+                  });
+                  perfQueued++;
+                  core.info('Queued performance baseline for PR #39 at ' + candidate.sha);
+                } catch (error) {
+                  await sourceApi(base + '/statuses/' + candidate.sha, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      state: 'failure',
+                      context: 'goxboard-builder/perf-baseline',
+                      description: 'Performance baseline workflow dispatch failed',
+                      target_url: perfTargetUrl
+                    })
+                  });
+                  throw error;
+                }
               }
             }
 
@@ -296,6 +351,7 @@ jobs:
             }
 
             core.info('Queued ' + queued + ' CI build(s), skipped ' + skipped + ' checked commit(s); queued ' +
+              perfQueued + ' performance baseline(s), skipped ' + perfSkipped + '; queued ' +
               releasesQueued + ' release(s), skipped ' + releasesSkipped + ' release(s).');
 
 # Revalidation cycle: source PR branch commits are picked up by the next poller run.
