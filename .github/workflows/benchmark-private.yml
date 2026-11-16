@@ -141,6 +141,8 @@ jobs:
           export PGPASSWORD=test
           createdb -h 127.0.0.1 -U postgres goxboard_bench
           mysql -h 127.0.0.1 -uroot -ptest -e "CREATE DATABASE goxboard_bench"
+          # Preserve the latest InnoDB deadlock trace in service logs for benchmark diagnosis.
+          mysql -h 127.0.0.1 -uroot -ptest -e "SET GLOBAL innodb_print_all_deadlocks=ON"
 
       - name: Run database baselines
         id: db
@@ -166,6 +168,8 @@ jobs:
           run_driver sqlite "$RUNNER_TEMP/db-perf/sqlite.json"
           run_driver postgres "$RUNNER_TEMP/db-perf/postgres.json"
           run_driver mysql "$RUNNER_TEMP/db-perf/mysql.json"
+          # SHOW ENGINE INNODB STATUS includes the latest detected deadlock and both transaction traces.
+          mysql -h 127.0.0.1 -uroot -ptest -e "SHOW ENGINE INNODB STATUS\\G" > "$RUNNER_TEMP/db-perf/mysql-innodb-status.txt" || true
           if [ "$failures" -gt 0 ]; then
             echo "::error::$failures database driver baseline(s) failed; all drivers were still attempted"
             exit 1
