@@ -408,3 +408,4 @@ jobs:
 # Revalidate Goxboard PR #42 after applying gofmt to the traffic batch constants (head 38c2f35f203d36221325fb0aaf053725eb41da3c).
 # Revalidate Goxboard PR #42 after fixing stat_users API ordering, DATE composite keys in DB Copy, and migration temp-table cleanup (head 938ba10e87da57104a270d8ecbdec072abce755c).
 # Revalidate Goxboard PR #42 after serializing concurrent Flush callers before the entitlement barrier (head 8ec2f3ffb57886da9a207e50c5e67850a07ca255).
+# Revalidate Goxboard PR #42 after verifying canonical stat_users row counts and exact MySQL temporary-table cleanup (head fb6eaf52b26b2256f7e0e64385e95d6b87e2d9ca).
