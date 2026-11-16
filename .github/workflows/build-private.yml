@@ -168,7 +168,11 @@ jobs:
 
       - name: Critical MySQL/PostgreSQL migration regression
         working-directory: source
-        run: go test ./internal/app/traffic -run '^TestIntegrationLegacyStatUsersPrimaryKeyMigration
+        run: go test ./internal/app/traffic -run "^TestIntegrationLegacyStatUsersPrimaryKeyMigration$" -race -count=1 -v
+
+      - name: Test
+        working-directory: source
+        run: go test ./... -race -count=1
 
       - name: PostgreSQL/MySQL migration integration tests
         working-directory: source
