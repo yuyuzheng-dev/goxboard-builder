@@ -383,3 +383,4 @@ jobs:
 # Revalidation cycle: build Goxboard source PR #40 (remove legacy payment/order compatibility) at da47a61b07386195e9c3613a487a3553bf873935.
 # Revalidation cycle: rebuild Goxboard PR #40 after fixing gofmt and remaining TypeScript status/order fixtures (head d1cbafa3b2cc7e933e031dc77f355c8bc412a841).
 # Revalidation cycle: rebuild Goxboard PR #40 after removing remaining status-4 checks from invite commission totals and payment notifications (head f996867e70f51aa41e0ea1240215ceae8ff43613).
+# Revalidation cycle: rebuild Goxboard PR #40 after removing the user-dashboard paid-order status reference and correcting the payment verification comment (head 9112b100880c19a2bc8da8efc75665bc95346fdf).
