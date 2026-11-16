@@ -404,3 +404,4 @@ jobs:
 # Revalidation cycle: rerun Goxboard PR #42 after removing the remaining gofmt blank line (head 518523ca7943d25b2454a1bda343531b54f36e8a).
 # Revalidation cycle: run PR #42 Node Push and PostgreSQL write-tail diagnostics.
 # Revalidation cycle: capture MySQL InnoDB deadlock trace for Goxboard PR #42 at head 518523ca7943d25b2454a1bda343531b54f36e8a.
+# Revalidation cycle: rerun Goxboard PR #42 with jittered bounded MySQL deadlock retries and InnoDB lock diagnostics (head ca92e61603f37e36d8101666e4175b7f9fd5bb55).
