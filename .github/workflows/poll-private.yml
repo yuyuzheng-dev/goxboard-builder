@@ -385,3 +385,4 @@ jobs:
 # Revalidation cycle: rebuild Goxboard PR #40 after removing remaining status-4 checks from invite commission totals and payment notifications (head f996867e70f51aa41e0ea1240215ceae8ff43613).
 # Revalidation cycle: rebuild Goxboard PR #40 after removing the user-dashboard paid-order status reference and correcting the payment verification comment (head 9112b100880c19a2bc8da8efc75665bc95346fdf).
 # Revalidation cycle: rebuild Goxboard PR #40 after removing PaymentConfigHistory from the Xboard importer model table list; retain only retired-table emptiness checks and --force cleanup (head c1754fd48e4c9d1098b1e4c011340d382513fc07).
+# Revalidation cycle: rebuild Goxboard PR #40 after removing remaining PaymentConfigHistory fixtures from admin config tests and database-copy seed data; admin test now asserts fresh schema does not create the retired table (head 1a8d9754a8e6322995e1d9619010e224fc29df62).
