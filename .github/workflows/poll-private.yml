@@ -403,3 +403,4 @@ jobs:
 # Revalidation cycle: rebuild Goxboard PR #40 after updating internal/model/model_test.go to expect 32 registered models after removing PaymentConfigHistory (head b3d4b05f23b8a2d6daf74121dad2ebbd5a04f5ce).
 # Revalidation cycle: rerun Goxboard PR #42 after removing the remaining gofmt blank line (head 518523ca7943d25b2454a1bda343531b54f36e8a).
 # Revalidation cycle: run PR #42 Node Push and PostgreSQL write-tail diagnostics.
+# Revalidation cycle: capture MySQL InnoDB deadlock trace for Goxboard PR #42 at head 518523ca7943d25b2454a1bda343531b54f36e8a.
