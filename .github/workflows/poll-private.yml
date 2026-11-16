@@ -7,6 +7,7 @@ name: Poll private goxboard
 # PR39 2000-row traffic batches revalidation 2026-11-16
 # PR39 gofmt-only formatting fix revalidation 2026-11-16
 # PR39 100k traffic flush benchmark revalidation 2026-11-16
+# PR39 cap node_push soak at 100k traffic pairs revalidation 2026-11-16
 
 # Source validation is centralized here: a push to this file, the schedule, or manual dispatch discovers private source refs, queues Builder workflows, reports status on source commits, and verifies gofmt, Go build/vet/vulnerability/Race checks, PostgreSQL/MySQL integration, Web and Docker smoke tests, Goxboard-only retired-table cleanup, Xboard source-snapshot protection, and importer report/log secret redaction. A workflow-file push is also the immediate revalidation trigger for updated source PR heads.
 # Pushes to this workflow revalidate the latest source PR heads immediately, including follow-up commits after an initial CI run.
