@@ -401,5 +401,5 @@ jobs:
 # Revalidation cycle: rebuild Goxboard PR #40 after removing remaining PaymentConfigHistory fixtures from admin config tests and database-copy seed data; admin test now asserts fresh schema does not create the retired table (head 1a8d9754a8e6322995e1d9619010e224fc29df62).
 # Revalidation cycle: rebuild Goxboard PR #40 after replacing the last OrderStatusDiscounted fixture in admin user-detail stats with the supported processing status (head 97d962a95f70f1aa6195517d50f4d2790e38fb2e).
 # Revalidation cycle: rebuild Goxboard PR #40 after updating internal/model/model_test.go to expect 32 registered models after removing PaymentConfigHistory (head b3d4b05f23b8a2d6daf74121dad2ebbd5a04f5ce).
-# Revalidation cycle: rerun Goxboard PR #42 after gofmt cleanup of the retry helper comment (head a0c975668cac78e9a4b74c4067d3fcfcfebcc894).
+# Revalidation cycle: rerun Goxboard PR #42 after removing the remaining gofmt blank line (head 518523ca7943d25b2454a1bda343531b54f36e8a).
 # Revalidation cycle: run PR #42 Node Push and PostgreSQL write-tail diagnostics.
