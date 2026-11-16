@@ -410,3 +410,4 @@ jobs:
 # Revalidate Goxboard PR #42 after serializing concurrent Flush callers before the entitlement barrier (head 8ec2f3ffb57886da9a207e50c5e67850a07ca255).
 # Revalidate Goxboard PR #42 after verifying canonical stat_users row counts and exact MySQL temporary-table cleanup (head fb6eaf52b26b2256f7e0e64385e95d6b87e2d9ca).
 # Revalidate Goxboard PR #42 after final post-AutoMigrate stat_users cleanup and repeat-migration idempotency test (head d69f312b787e4b730fec9fcf91f2488577982209).
+# Revalidate Goxboard PR #42 after SQL trace instrumentation for repeated MySQL migration failure (head a61bb6049acf4e20f36c1bb81f4ce524ed02f55b).
