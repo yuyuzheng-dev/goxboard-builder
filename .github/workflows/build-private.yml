@@ -296,7 +296,6 @@ jobs:
 
             core.info('Private commit status: ' + (passed ? 'success' : 'failure'));
             core.info('Job results: ' + JSON.stringify(results));
- -race -count=1 -v
 
       - name: Test
         working-directory: source
