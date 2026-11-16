@@ -380,3 +380,4 @@ jobs:
 # Revalidation cycle: test PR #39 latest head after making API and database benchmark stages independent.
 # Revalidation cycle: rerun PR #39 baseline after removing obsolete subscription flag overrides and using User-Agent format detection.
 # Revalidation cycle: rerun PR #39 after removing legacy flag query parameters from subscription benchmark requests.
+# Revalidation cycle: build Goxboard source PR #40 (remove legacy payment/order compatibility) at da47a61b07386195e9c3613a487a3553bf873935.
