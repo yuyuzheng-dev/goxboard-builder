@@ -405,4 +405,4 @@ jobs:
 # Revalidation cycle: run PR #42 Node Push and PostgreSQL write-tail diagnostics.
 # Revalidation cycle: capture MySQL InnoDB deadlock trace for Goxboard PR #42 at head 518523ca7943d25b2454a1bda343531b54f36e8a.
 # Revalidation cycle: rerun Goxboard PR #42 with jittered bounded MySQL deadlock retries and InnoDB lock diagnostics (head ca92e61603f37e36d8101666e4175b7f9fd5bb55).
-# Revalidate Goxboard PR #42 after reducing remainder writes, batching user counter updates, and migrating stat_users to a composite primary key (head d5679711e360746e09a0690178e7b9a89d2aa34e).
+# Revalidate Goxboard PR #42 after reducing remainder writes, batching user counter updates, migrating stat_users to a composite primary key, and using portable migration defaults (head 5af93ea59fb947d297567997c353893c539faf46).
