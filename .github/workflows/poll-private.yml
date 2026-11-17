@@ -1,5 +1,7 @@
 name: Poll private goxboard
 
+# PR46 100k flush batch/index reduction, MySQL plan diagnostics and commission write benchmark revalidation 2026-11-17
+
 # PR46 gofmt fix revalidation after the dbbench query-plan alignment correction 2026-11-17
 
 # PR45 gofmt correction revalidation 2026-11-17
