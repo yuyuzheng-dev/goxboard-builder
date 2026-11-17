@@ -151,6 +151,11 @@ jobs:
           export PGPASSWORD=test
           createdb -h 127.0.0.1 -U postgres goxboard_bench
           mysql -h 127.0.0.1 -uroot -ptest -e "CREATE DATABASE goxboard_bench"
+          # Separate disposable databases keep every concurrency profile on a clean dataset.
+          for concurrency in 1 4 8 16 32; do
+            createdb -h 127.0.0.1 -U postgres "goxboard_bench_c${concurrency}"
+            mysql -h 127.0.0.1 -uroot -ptest -e "CREATE DATABASE goxboard_bench_c${concurrency}"
+          done
           # Preserve the latest InnoDB deadlock trace in service logs for benchmark diagnosis.
           mysql -h 127.0.0.1 -uroot -ptest -e "SET GLOBAL innodb_print_all_deadlocks=ON"
 
@@ -165,7 +170,7 @@ jobs:
           run_driver() {
             local driver="$1"
             local output="$2"
-            echo "::group::Database baseline: $driver"
+            echo "::group::Database baseline: $driver (16 workers, 5s)"
             if "$RUNNER_TEMP/dbbench" -driver "$driver" -duration 5s -concurrency 16 -out "$output"; then
               echo "PASS: $driver baseline"
             else
@@ -175,13 +180,41 @@ jobs:
             fi
             echo "::endgroup::"
           }
+          run_profile() {
+            local driver="$1"
+            local concurrency="$2"
+            local output="$3"
+            local dsn=""
+            case "$driver" in
+              postgres) dsn="postgres://postgres:test@127.0.0.1:5432/goxboard_bench_c${concurrency}?sslmode=disable" ;;
+              mysql) dsn="root:test@tcp(127.0.0.1:3306)/goxboard_bench_c${concurrency}" ;;
+            esac
+            local -a args=(-driver "$driver" -duration 8s -concurrency "$concurrency" -out "$output")
+            if [[ -n "$dsn" ]]; then args+=(-dsn "$dsn"); fi
+            echo "::group::Database stress: $driver (concurrency $concurrency, 8s)"
+            if "$RUNNER_TEMP/dbbench" "${args[@]}"; then
+              echo "PASS: $driver concurrency $concurrency"
+            else
+              rc=$?
+              echo "::error title=$driver concurrency $concurrency failed::dbbench exited with status $rc; see the JSON artifact and scenario errors"
+              failures=$((failures + 1))
+            fi
+            echo "::endgroup::"
+          }
           run_driver sqlite "$RUNNER_TEMP/db-perf/sqlite.json"
           run_driver postgres "$RUNNER_TEMP/db-perf/postgres.json"
           run_driver mysql "$RUNNER_TEMP/db-perf/mysql.json"
-          # SHOW ENGINE INNODB STATUS includes the latest detected deadlock and both transaction traces.
+          # Sweep 1/4/8/16/32 concurrent node writers on clean, isolated datasets.
+          for concurrency in 1 4 8 16 32; do
+            run_profile sqlite "$concurrency" "$RUNNER_TEMP/db-perf/sqlite-c${concurrency}.json"
+            run_profile postgres "$concurrency" "$RUNNER_TEMP/db-perf/postgres-c${concurrency}.json"
+            run_profile mysql "$concurrency" "$RUNNER_TEMP/db-perf/mysql-c${concurrency}.json"
+            # Capture the most recent InnoDB deadlock/lock-wait trace for each profile.
+            mysql -h 127.0.0.1 -uroot -ptest -e "SHOW ENGINE INNODB STATUS\\G" > "$RUNNER_TEMP/db-perf/mysql-c${concurrency}-innodb-status.txt" || true
+          done
           mysql -h 127.0.0.1 -uroot -ptest -e "SHOW ENGINE INNODB STATUS\\G" > "$RUNNER_TEMP/db-perf/mysql-innodb-status.txt" || true
           if [ "$failures" -gt 0 ]; then
-            echo "::error::$failures database driver baseline(s) failed; all drivers were still attempted"
+            echo "::error::$failures database baseline/profile(s) failed; all drivers and concurrency profiles were still attempted"
             exit 1
           fi
 
