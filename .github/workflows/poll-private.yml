@@ -67,7 +67,8 @@ jobs:
         env:
           SOURCE_TOKEN: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
           SOURCE_REF: ${{ inputs.ref }}
-          FORCE: ${{ inputs.force }}
+          FORCE: true
+          TARGET_PR: '43'
           BUILD_RUNNER: ${{ inputs.runner || 'ubuntu-24.04' }}
         with:
           github-token: ${{ github.token }}
@@ -115,6 +116,7 @@ jobs:
             const releaseCandidates = [];
             function addCandidate(sha, ref, kind, prNumber) {
               if (!sha) return;
+              if (process.env.TARGET_PR && String(prNumber) !== process.env.TARGET_PR) return;
               const existing = candidates.get(sha) || {
                 sha,
                 source_ref: ref,
@@ -424,3 +426,5 @@ jobs:
 # Revalidate Goxboard PR #43 database query/index, batched admin-write, idle-pool tuning, and SQLite traffic benchmark timeout handling (head 45de73bb9e9664729488d601d4edbe7a393becd1).
 # Revalidate Goxboard PR #44 loopback pprof, runtime/pool metrics, and slow-SQL capture (head ffe9920f8962b93b65db3d7e8f4a636eb18c2a46).
 # Revalidation cycle: rebuild Goxboard PR #43 after correcting gofmt alignment in scripts/dbbench/main.go (head 6be319f48d32273cb196a70cbb65735119c4a190).
+
+# One-shot forced revalidation: PR #43 extended DB concurrency sweep and retained API server log.
