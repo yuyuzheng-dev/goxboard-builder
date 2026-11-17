@@ -262,10 +262,10 @@ jobs:
               // PR #42 owns Node Push flush-tail and PostgreSQL lock-contention diagnostics.
               // PR #43 owns database query/index and batched admin-write measurements.
               // PR #44 owns runtime, memory, goroutine, and connection-pool telemetry.
-              // PR #45 owns the end-to-end Xboard migration rehearsal and final acceptance baseline.
+              // PR #45's runtime baseline is running on a059df0d; later PR45 commits only expand importer tests/docs, so avoid a duplicate expensive baseline.
               // Keep performance runs separate from normal CI so a failed functional
               // test does not prevent independent database measurements.
-              if (['39', '42', '43', '44', '45'].includes(candidate.pr_number)) {
+              if (['39', '42', '43', '44'].includes(candidate.pr_number)) {
                 const previousPerf = statuses
                   .filter(status => status.context === 'goxboard-builder/perf-baseline')
                   .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))[0];
