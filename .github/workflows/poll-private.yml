@@ -4,6 +4,7 @@ name: Poll private goxboard
 # PR45 full source/target CLI matrix gofmt revalidation 2026-11-17
 # PR45 final performance and acceptance documentation revalidation 2026-11-17
 # PR45 latest acceptance-link doc-only commit revalidation 2026-11-17
+# PR46 traffic flush, MySQL query-plan and bounded commission approval revalidation 2026-11-17
 
 # PR42 Node Push and PostgreSQL write-tail diagnostics revalidation 2026-11-16
 # PR39 concurrent traffic benchmark revalidation 2026-11-16
@@ -268,7 +269,7 @@ jobs:
               // PR #45's runtime baseline is running on a059df0d; later PR45 commits only expand importer tests/docs, so avoid a duplicate expensive baseline.
               // Keep performance runs separate from normal CI so a failed functional
               // test does not prevent independent database measurements.
-              if (['39', '42', '43', '44'].includes(candidate.pr_number)) {
+              if (['39', '42', '43', '44', '46'].includes(candidate.pr_number)) {
                 const previousPerf = statuses
                   .filter(status => status.context === 'goxboard-builder/perf-baseline')
                   .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))[0];
@@ -294,7 +295,9 @@ jobs:
                         ? 'Queued for runtime, memory, goroutine and DB-pool diagnostics'
                         : candidate.pr_number === '45'
                           ? 'Queued for Xboard migration rehearsal and final API/DB performance acceptance'
-                          : 'Queued for SQLite API and database baselines',
+                          : candidate.pr_number === '46'
+                            ? 'Queued for traffic flush, MySQL query-plan and commission approval diagnostics'
+                            : 'Queued for SQLite API and database baselines',
                     target_url: perfTargetUrl
                   })
                 });
