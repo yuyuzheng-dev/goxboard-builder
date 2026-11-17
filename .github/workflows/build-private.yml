@@ -152,7 +152,7 @@ jobs:
           if [ -n "$files" ]; then
             printf 'Files need gofmt:\n%s\n' "$files"
             for file in $files; do
-              gofmt -d "$file"
+              gofmt -d "$file" || true
             done
             exit 1
           fi
