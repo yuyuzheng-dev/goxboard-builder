@@ -3,6 +3,7 @@ name: Poll private goxboard
 # PR45 gofmt correction revalidation 2026-11-17
 # PR45 full source/target CLI matrix gofmt revalidation 2026-11-17
 # PR45 final performance and acceptance documentation revalidation 2026-11-17
+# PR45 latest acceptance-link doc-only commit revalidation 2026-11-17
 
 # PR42 Node Push and PostgreSQL write-tail diagnostics revalidation 2026-11-16
 # PR39 concurrent traffic benchmark revalidation 2026-11-16
