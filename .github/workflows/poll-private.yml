@@ -67,8 +67,8 @@ jobs:
         env:
           SOURCE_TOKEN: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
           SOURCE_REF: ${{ inputs.ref }}
-          FORCE: true
-          TARGET_PR: '43'
+          FORCE: ${{ inputs.force }}
+          TARGET_PR: ''
           BUILD_RUNNER: ${{ inputs.runner || 'ubuntu-24.04' }}
         with:
           github-token: ${{ github.token }}
@@ -428,3 +428,5 @@ jobs:
 # Revalidation cycle: rebuild Goxboard PR #43 after correcting gofmt alignment in scripts/dbbench/main.go (head 6be319f48d32273cb196a70cbb65735119c4a190).
 
 # One-shot forced revalidation: PR #43 extended DB concurrency sweep and retained API server log.
+
+# One-shot PR #43 performance dispatch queued; normal poller mode restored.
