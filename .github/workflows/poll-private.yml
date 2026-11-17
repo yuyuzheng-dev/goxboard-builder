@@ -255,10 +255,12 @@ jobs:
               }
 
               // PR #39 owns the Phase 1 API and database performance baseline.
-              // PR #42 owns the Node Push flush-tail and PostgreSQL lock-contention diagnostics.
+              // PR #42 owns Node Push flush-tail and PostgreSQL lock-contention diagnostics.
+              // PR #43 owns database query/index and batched admin-write measurements.
+              // PR #44 owns runtime, memory, goroutine, and connection-pool telemetry.
               // Keep performance runs separate from normal CI so a failed functional
               // test does not prevent independent database measurements.
-              if (candidate.pr_number === '39' || candidate.pr_number === '42') {
+              if (['39', '42', '43', '44'].includes(candidate.pr_number)) {
                 const previousPerf = statuses
                   .filter(status => status.context === 'goxboard-builder/perf-baseline')
                   .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))[0];
@@ -278,7 +280,11 @@ jobs:
                     context: 'goxboard-builder/perf-baseline',
                     description: candidate.pr_number === '42'
                     ? 'Queued for Node Push and PostgreSQL write-tail diagnostics'
-                    : 'Queued for SQLite API and database baselines',
+                    : candidate.pr_number === '43'
+                      ? 'Queued for DB query/index and batched-write performance diagnostics'
+                      : candidate.pr_number === '44'
+                        ? 'Queued for runtime, memory, goroutine and DB-pool diagnostics'
+                        : 'Queued for SQLite API and database baselines',
                     target_url: perfTargetUrl
                   })
                 });
