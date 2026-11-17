@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: goxboard-phase1-baseline-${{ github.ref }}
+  group: goxboard-phase1-baseline-${{ github.event.inputs.source_sha || 'default' }}
   cancel-in-progress: true
 
 jobs:
