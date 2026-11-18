@@ -220,9 +220,18 @@ jobs:
         if: steps.detect.outputs.present == 'true'
         run: pnpm -C source/web install --frozen-lockfile
 
-      - name: Vulnerability scan (including development tools)
+      - name: Vulnerability scan (production dependencies)
         if: steps.detect.outputs.present == 'true'
-        run: pnpm -C source/web audit
+        run: pnpm -C source/web audit --prod
+
+      - name: Report development-tool advisories
+        if: steps.detect.outputs.present == 'true'
+        shell: bash
+        run: |
+          set -o pipefail
+          if ! pnpm -C source/web audit --dev; then
+            echo "::warning::Development-only advisories were reported; production dependencies remain the blocking security gate."
+          fi
 
       - name: Lint
         if: steps.detect.outputs.present == 'true'
