@@ -1,5 +1,7 @@
 name: Poll private goxboard
 
+# PR46 final SQLite JSON bulk user/stat update and gofmt revalidation 2026-11-18
+
 # PR46 SQLite json_each bulk stat_users upsert and GORM test destination fix revalidation 2026-11-18
 
 # PR46 integer-only traffic remainder bypass revalidation at current head 3b27f53 2026-11-18
