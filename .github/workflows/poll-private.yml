@@ -1,5 +1,7 @@
 name: Poll private goxboard
 
+# PR46 SQLite commission benchmark fix at bf2a08f full-matrix validation 2026-11-18
+
 # PR46 exact head 90636bc full CI and performance matrix revalidation 2026-11-18
 
 # PR46 SQLite JSON driver date-key correction and raw-SQL retry fault-injection revalidation 2026-11-18
