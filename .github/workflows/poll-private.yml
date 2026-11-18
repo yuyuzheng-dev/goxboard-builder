@@ -1,6 +1,6 @@
 name: Poll private goxboard
 
-# Goxboard PR47 EPay/Epusdt raw-signature boundary hardening revalidation 2026-11-19
+# Goxboard PR47 EPay/Epusdt raw-signature boundary hardening; gofmt correction revalidation 2026-11-19
 
 # PR46 PostgreSQL SMALLINT commission toggle at c41673e final full-matrix validation 2026-11-18
 
