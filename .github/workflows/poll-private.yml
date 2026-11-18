@@ -1,5 +1,7 @@
 name: Poll private goxboard
 
+# PR46 dbbench gofmt correction at 187caf0 full-matrix validation 2026-11-18
+
 # PR46 SQLite commission benchmark fix at bf2a08f full-matrix validation 2026-11-18
 
 # PR46 exact head 90636bc full CI and performance matrix revalidation 2026-11-18
