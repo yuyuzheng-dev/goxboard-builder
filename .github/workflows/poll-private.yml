@@ -1,5 +1,7 @@
 name: Poll private goxboard
 
+# PR46 PostgreSQL SMALLINT commission toggle at c41673e final full-matrix validation 2026-11-18
+
 # PR46 commission benchmark timestamp fixture at 4415eef full-matrix validation 2026-11-18
 
 # PR46 dbbench gofmt correction at 187caf0 full-matrix validation 2026-11-18
