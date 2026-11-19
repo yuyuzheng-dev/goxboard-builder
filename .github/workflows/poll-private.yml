@@ -163,18 +163,20 @@ jobs:
 
             const candidates = new Map();
             const releaseCandidates = [];
-            function addCandidate(sha, ref, kind, prNumber) {
+            function addCandidate(sha, ref, kind, prNumber, baseSha) {
               if (!sha) return;
               if (process.env.TARGET_PR && String(prNumber) !== process.env.TARGET_PR) return;
               const existing = candidates.get(sha) || {
                 sha,
                 source_ref: ref,
                 source_kind: kind,
-                pr_number: ''
+                pr_number: '',
+                base_sha: ''
               };
               if (prNumber) {
                 existing.source_kind = 'pull_request';
                 existing.pr_number = String(prNumber);
+                existing.base_sha = baseSha || '';
               }
               candidates.set(sha, existing);
             }
@@ -214,7 +216,7 @@ jobs:
                   core.warning('Skipping PR #' + pr.number + ': fork-head PRs are not enabled by this builder.');
                   continue;
                 }
-                addCandidate(pr.head.sha, pr.head.ref, 'pull_request', pr.number);
+                addCandidate(pr.head.sha, pr.head.ref, 'pull_request', pr.number, pr.base.sha);
               }
 
               // New v* tags are built and published here, never by workflows in the source repository.
@@ -286,6 +288,7 @@ jobs:
                     source_ref: candidate.source_ref,
                     source_kind: candidate.source_kind,
                     pr_number: candidate.pr_number,
+                    base_sha: candidate.base_sha || '',
                     runner: process.env.BUILD_RUNNER
                   }
                 });
