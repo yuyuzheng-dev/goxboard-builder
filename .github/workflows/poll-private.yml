@@ -2,7 +2,7 @@ name: Poll private goxboard
 
 # Revalidate Goxboard source PRs after tightening the removed-health-path smoke check (2026-11-19).
 
-# Revalidate PR #56/#57 latest heads after base-aware healthz smoke and mail retry/cancellation tests (2026-11-19).
+# Revalidate latest Goxboard PR heads after mail retry/cancel coverage and database-copy seed repair (2026-11-19).
 
 # Goxboard PR55 security-group assertion correction revalidation 2026-11-19
 
