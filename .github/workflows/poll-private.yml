@@ -502,3 +502,5 @@ jobs:
 # Revalidate Goxboard PR #59 after removing retired Age settings from integration tests and enforcing canonical app_url test fixtures (2026-11-19).
 
 # Revalidate Goxboard PR #60 after fixing write-only secret regressions, clearing persisted payment form secrets and redacting settings cache writes (2026-11-19).
+
+# Revalidate Goxboard PR #60 after restoring the SettingsGroupMeta type import required by save/discard callbacks (2026-11-19).
