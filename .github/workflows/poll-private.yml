@@ -506,3 +506,5 @@ jobs:
 # Revalidate Goxboard PR #60 after restoring the SettingsGroupMeta type import required by save/discard callbacks (2026-11-19).
 
 # Revalidate Goxboard PR #60 on merged main 357f848 with payment notify URL, settings metadata and write-only secret redaction integrated (2026-11-19).
+
+# Revalidate Goxboard PR #64 full PR58 revert and security regression tests, 2026-11-19.
