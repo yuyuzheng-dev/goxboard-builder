@@ -498,3 +498,5 @@ jobs:
 # Revalidate corrected Goxboard PRs #58-#61, 2026-11-19.
 
 # Revalidate Goxboard PR #58 after aligning cookie Origin and no-app_url order-link regression tests.
+
+# Revalidate Goxboard PR #59 after removing retired Age settings from integration tests and enforcing canonical app_url test fixtures (2026-11-19).
