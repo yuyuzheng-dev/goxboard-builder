@@ -1,5 +1,7 @@
 name: Poll private goxboard
 
+# Revalidate Goxboard source PRs after tightening the removed-health-path smoke check (2026-11-19).
+
 # Revalidate Goxboard PR #56/#57 with the new runtime smoke checks after this Builder update is merged (2026-11-19).
 
 # Goxboard PR55 security-group assertion correction revalidation 2026-11-19
