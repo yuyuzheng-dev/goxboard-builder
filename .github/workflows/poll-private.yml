@@ -496,3 +496,5 @@ jobs:
 # Revalidate Goxboard PRs #58, #59 and #60 (Host boundary, runtime settings and secret redaction), 2026-11-19.
 
 # Revalidate corrected Goxboard PRs #58-#61, 2026-11-19.
+
+# Revalidate Goxboard PR #58 after aligning cookie Origin and no-app_url order-link regression tests.
