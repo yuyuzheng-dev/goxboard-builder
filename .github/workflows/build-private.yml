@@ -271,6 +271,46 @@ jobs:
       - name: Check bundled CLI starts
         run: docker run --rm goxboard:ci version
 
+      - name: Start image and probe guest config and SPA fallback
+        env:
+          GOXBOARD_JWT_SECRET: builder-runtime-smoke-secret-0123456789abcdef
+        run: |
+          set -euo pipefail
+          name="goxboard-smoke-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          cleanup() {
+            docker logs "$name" || true
+            docker rm -f "$name" >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
+
+          docker run -d --name "$name" -p 127.0.0.1:18080:8080 \
+            -e GOXBOARD_SERVER_ADDR=:8080 \
+            -e GOXBOARD_DATA_DIR=/data \
+            -e GOXBOARD_JWT_SECRET="$GOXBOARD_JWT_SECRET" \
+            goxboard:ci serve
+
+          ready=false
+          for attempt in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:18080/api/v1/guest/config -o "$RUNNER_TEMP/guest-config.json"; then
+              ready=true
+              break
+            fi
+            sleep 1
+          done
+          [[ "$ready" == true ]] || { echo "::error::guest config did not become ready"; exit 1; }
+          jq -e '.data.app_name != null and (.data.register_enabled | type == "boolean") and (.data.captcha | type == "object")' \
+            "$RUNNER_TEMP/guest-config.json" >/dev/null
+
+          root_status="$(curl -sS -o "$RUNNER_TEMP/index.html" -w '%{http_code}' http://127.0.0.1:18080/)"
+          [[ "$root_status" == "200" ]] || { echo "::error::SPA root returned $root_status"; exit 1; }
+          grep -qi '<html' "$RUNNER_TEMP/index.html" || { echo "::error::SPA root is not HTML"; exit 1; }
+
+          healthz_status="$(curl -sS -D "$RUNNER_TEMP/healthz.headers" -o "$RUNNER_TEMP/healthz.body" -w '%{http_code}' http://127.0.0.1:18080/healthz)"
+          if grep -qi '^content-type: application/json' "$RUNNER_TEMP/healthz.headers"; then
+            echo "::error::/healthz must not expose a public JSON endpoint (HTTP $healthz_status)"
+            exit 1
+          fi
+
   report:
     name: Report aggregate status to private commit
     if: always()
