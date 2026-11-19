@@ -315,7 +315,7 @@ jobs:
               // PR #45's runtime baseline is running on a059df0d; later PR45 commits only expand importer tests/docs, so avoid a duplicate expensive baseline.
               // Keep performance runs separate from normal CI so a failed functional
               // test does not prevent independent database measurements.
-              if (['39', '42', '43', '44', '46'].includes(candidate.pr_number)) {
+              if (['39', '42', '43', '44', '46', '62'].includes(candidate.pr_number)) {
                 const previousPerf = statuses
                   .filter(status => status.context === 'goxboard-builder/perf-baseline')
                   .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))[0];
@@ -343,7 +343,9 @@ jobs:
                           ? 'Queued for Xboard migration rehearsal and final API/DB performance acceptance'
                           : candidate.pr_number === '46'
                             ? 'Queued for traffic flush, MySQL query-plan and commission approval diagnostics'
-                            : 'Queued for SQLite API and database baselines',
+                            : candidate.pr_number === '62'
+                              ? 'Queued for 100k-user / 500k-order query coverage and existing DB baselines'
+                              : 'Queued for SQLite API and database baselines',
                     target_url: perfTargetUrl
                   })
                 });
@@ -354,7 +356,10 @@ jobs:
                     repo: context.repo.repo,
                     workflow_id: 'benchmark-private.yml',
                     ref: 'main',
-                    inputs: { source_sha: candidate.sha }
+                    inputs: {
+                      source_sha: candidate.sha,
+                      large_query_dataset: candidate.pr_number === '62' ? 'true' : 'false'
+                    }
                   });
                   perfQueued++;
                   core.info('Queued performance diagnostics for PR #' + candidate.pr_number + ' at ' + candidate.sha);

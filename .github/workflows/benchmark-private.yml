@@ -8,6 +8,11 @@ on:
         required: false
         default: 499cad1e0d4b5071ac91121b4f4fb8f6e185f070
         type: string
+      large_query_dataset:
+        description: Also run the 100k-user / 500k-order query-coverage profile
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -20,7 +25,7 @@ jobs:
   benchmark:
     name: API and SQLite / PostgreSQL / MySQL baseline
     runs-on: ubuntu-24.04
-    timeout-minutes: 40
+    timeout-minutes: 75
     services:
       postgres:
         image: postgres:16
@@ -151,6 +156,10 @@ jobs:
           export PGPASSWORD=test
           createdb -h 127.0.0.1 -U postgres goxboard_bench
           mysql -h 127.0.0.1 -uroot -ptest -e "CREATE DATABASE goxboard_bench"
+          if [[ "${{ github.event.inputs.large_query_dataset }}" == "true" ]]; then
+            createdb -h 127.0.0.1 -U postgres goxboard_bench_large
+            mysql -h 127.0.0.1 -uroot -ptest -e "CREATE DATABASE goxboard_bench_large"
+          fi
           # Separate disposable databases keep every concurrency profile on a clean dataset.
           for concurrency in 1 4 8 16 32; do
             createdb -h 127.0.0.1 -U postgres "goxboard_bench_c${concurrency}"
@@ -204,6 +213,31 @@ jobs:
           run_driver sqlite "$RUNNER_TEMP/db-perf/sqlite.json"
           run_driver postgres "$RUNNER_TEMP/db-perf/postgres.json"
           run_driver mysql "$RUNNER_TEMP/db-perf/mysql.json"
+          if [[ "${{ github.event.inputs.large_query_dataset }}" == "true" ]]; then
+            run_large() {
+              local driver="$1"
+              local output="$2"
+              local dsn=""
+              case "$driver" in
+                postgres) dsn="postgres://postgres:test@127.0.0.1:5432/goxboard_bench_large?sslmode=disable" ;;
+                mysql) dsn="root:test@tcp(127.0.0.1:3306)/goxboard_bench_large" ;;
+              esac
+              local -a args=(-driver "$driver" -large-dataset -duration 3s -concurrency 8 -out "$output")
+              if [[ -n "$dsn" ]]; then args+=(-dsn "$dsn"); fi
+              echo "::group::Large query coverage: $driver (100k users, 500k orders)"
+              if "$RUNNER_TEMP/dbbench" "${args[@]}"; then
+                echo "PASS: $driver large query coverage"
+              else
+                rc=$?
+                echo "::error title=$driver large query coverage failed::dbbench exited with status $rc"
+                failures=$((failures + 1))
+              fi
+              echo "::endgroup::"
+            }
+            run_large sqlite "$RUNNER_TEMP/db-perf/sqlite-large.json"
+            run_large postgres "$RUNNER_TEMP/db-perf/postgres-large.json"
+            run_large mysql "$RUNNER_TEMP/db-perf/mysql-large.json"
+          fi
           # Sweep 1/4/8/16/32 concurrent node writers on clean, isolated datasets.
           for concurrency in 1 4 8 16 32; do
             run_profile sqlite "$concurrency" "$RUNNER_TEMP/db-perf/sqlite-c${concurrency}.json"
