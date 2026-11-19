@@ -487,3 +487,5 @@ jobs:
 # One-shot forced revalidation: PR #43 extended DB concurrency sweep and retained API server log.
 
 # One-shot PR #43 performance dispatch queued; normal poller mode restored.
+
+# Revalidate Goxboard PRs #58, #59 and #60 (Host boundary, runtime settings and secret redaction), 2026-11-19.
