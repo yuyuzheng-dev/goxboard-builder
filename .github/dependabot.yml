@@ -1,0 +1,16 @@
+# Keep the private Builder's GitHub Actions current without mixing its CI tooling into Goxboard source.
+version: 2
+
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    cooldown:
+      default-days: 3
+    commit-message:
+      prefix: ci(deps)
+    groups:
+      actions:
+        patterns: ['*']
