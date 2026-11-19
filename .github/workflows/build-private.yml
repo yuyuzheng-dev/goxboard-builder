@@ -306,8 +306,17 @@ jobs:
           grep -qi '<html' "$RUNNER_TEMP/index.html" || { echo "::error::SPA root is not HTML"; exit 1; }
 
           healthz_status="$(curl -sS -D "$RUNNER_TEMP/healthz.headers" -o "$RUNNER_TEMP/healthz.body" -w '%{http_code}' http://127.0.0.1:18080/healthz)"
-          if grep -qi '^content-type: application/json' "$RUNNER_TEMP/healthz.headers"; then
-            echo "::error::/healthz must not expose a public JSON endpoint (HTTP $healthz_status)"
+          if [[ "$healthz_status" == "200" ]]; then
+            grep -qi '^content-type: text/html' "$RUNNER_TEMP/healthz.headers" || {
+              echo "::error::/healthz returned HTTP 200 without the normal SPA HTML fallback"
+              exit 1
+            }
+          elif [[ "$healthz_status" != "404" ]]; then
+            echo "::error::/healthz returned unexpected HTTP $healthz_status"
+            exit 1
+          fi
+          if grep -Eq '"(version|uptime)"' "$RUNNER_TEMP/healthz.body"; then
+            echo "::error::/healthz exposed runtime version or uptime diagnostics"
             exit 1
           fi
 
