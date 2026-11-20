@@ -122,8 +122,8 @@ jobs:
         env:
           SOURCE_TOKEN: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
           SOURCE_REF: ${{ inputs.ref }}
-          FORCE: 'true'
-          TARGET_PR: '65'
+          FORCE: ${{ inputs.force }}
+          TARGET_PR: ''
           BUILD_RUNNER: ${{ inputs.runner || 'ubuntu-24.04' }}
         with:
           github-token: ${{ github.token }}
