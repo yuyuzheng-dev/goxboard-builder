@@ -1,5 +1,7 @@
 name: Poll private goxboard
 
+# Goxboard PR #68 custom scheduled commands and PR #69 runtime error events full-matrix validation (2026-11-20), source heads 5ab8374d7cc86675f14295542c125fc7a678a1d7 and 5e2f3c6b05597a4e2567db0f109b3efb022aac1e.
+
 # Goxboard PR #67 built-in scheduled job management full-matrix validation trigger (2026-11-20), source head a9e06ec2616c48cc9d0058e59c1cb07bcd30ce2a.
 # Goxboard PR #66 client preset compatibility revalidation for source commit fff984bba0efb3fa3aa120f733de8a3af27d4890 (2026-11-20).
 # Revalidate PR #66 after aligning generic share-link compatibility tests and guarding the optional systemmetrics probe (2026-11-20).
@@ -519,3 +521,4 @@ jobs:
 # Revalidate Goxboard PR #64 full PR58 revert and security regression tests, 2026-11-19.
 
 # Full Builder validation on final Goxboard main SHA ab349140459be3ff0f63b30e2538bbd841669b72 after merging PR #64, 2026-11-19.
+
