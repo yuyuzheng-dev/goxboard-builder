@@ -1,6 +1,6 @@
 name: Poll private goxboard
 
-# Goxboard PR #68 custom scheduled commands and PR #69 runtime error events full-matrix revalidation (2026-11-20), corrected source heads 3a0b868c9c61c0091c52ea836e0c65bbc6d67525 and f3bf20968a99245ffc3401cb4f9abb11b711b51a.
+# Goxboard PR #68 custom scheduled commands and PR #69 runtime error events final full-matrix revalidation (2026-11-20), canonical gofmt heads 1939a1432b9aa99ff3898ae6e86d48dea716a870 and 185412901f797e7248da9c665a697f46c0d545b3.
 
 # Goxboard PR #67 built-in scheduled job management full-matrix validation trigger (2026-11-20), source head a9e06ec2616c48cc9d0058e59c1cb07bcd30ce2a.
 # Goxboard PR #66 client preset compatibility revalidation for source commit fff984bba0efb3fa3aa120f733de8a3af27d4890 (2026-11-20).
