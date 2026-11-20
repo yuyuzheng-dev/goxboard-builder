@@ -1,6 +1,6 @@
 name: Poll private goxboard
 
-# PR #68/#69 final DB-copy schedule fixture revalidation: 4b734400776e48c73895cc862c01b4d307947220 / 04ea8e62de9972e2906ac784fe92647c9916615a.
+# PR #68/#69 complete DB-copy schedule-control and run-history fixtures: f776c434cebf2457716f13b77fb47ab979a517d6 / a66e1689c0ad2539687afd42ed240d70e384d51d.
 
 # PR #69 runtime logging compile cleanup revalidation, source head 15d9936a6b6bab04c3ebe50a141d7917ec43a060.
 
