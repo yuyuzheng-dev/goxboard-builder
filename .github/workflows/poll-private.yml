@@ -2,6 +2,7 @@ name: Poll private goxboard
 
 # Goxboard PR #65 host/container resource monitoring full-matrix validation trigger (2026-11-20).
 # Revalidate PR #65 after Go formatting and Web lint corrections.
+# PR #65 also checks live Docker --cpus/--memory cgroup detection.
 
 # Revalidate Goxboard source PRs after tightening the removed-health-path smoke check (2026-11-19).
 
