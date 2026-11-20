@@ -1,6 +1,6 @@
 name: Poll private goxboard
 
-# PR #69 final settings-test gofmt and full regression revalidation: a3c2b9e0bb4929574e7370379a77fdc2d960085d; PR #68 remains caf6dcdb750f690fffd83de1a4bd2de5912b7392.
+# PR #68/#69 final DB-copy schedule fixture revalidation: 4b734400776e48c73895cc862c01b4d307947220 / 04ea8e62de9972e2906ac784fe92647c9916615a.
 
 # PR #69 runtime logging compile cleanup revalidation, source head 15d9936a6b6bab04c3ebe50a141d7917ec43a060.
 
