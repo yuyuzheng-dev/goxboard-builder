@@ -1,5 +1,7 @@
 name: Poll private goxboard
 
+# Goxboard PR #65 host/container resource monitoring full-matrix validation trigger (2026-11-20).
+
 # Revalidate Goxboard source PRs after tightening the removed-health-path smoke check (2026-11-19).
 
 # Revalidate latest Goxboard PR heads after mail retry/cancel coverage and database-copy seed repair (2026-11-19).
