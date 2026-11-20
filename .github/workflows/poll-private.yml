@@ -1,5 +1,6 @@
 name: Poll private goxboard
 
+# Goxboard PR #67 built-in scheduled job management full-matrix validation trigger (2026-11-20), source head a9e06ec2616c48cc9d0058e59c1cb07bcd30ce2a.
 # Goxboard PR #66 client preset compatibility revalidation for source commit fff984bba0efb3fa3aa120f733de8a3af27d4890 (2026-11-20).
 # Revalidate PR #66 after aligning generic share-link compatibility tests and guarding the optional systemmetrics probe (2026-11-20).
 # Goxboard PR #65 host/container resource monitoring full-matrix validation trigger (2026-11-20).
