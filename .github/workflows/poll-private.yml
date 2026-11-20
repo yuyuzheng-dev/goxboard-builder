@@ -1,3 +1,4 @@
+# Goxboard PR #69 revalidation after redaction gofmt correction: source head fbaf80f08e499377a98dd16b229376911e69ac68.
 # Goxboard PR #69 credential-redaction hardening and clean-main ancestry revalidation: source head 7f93f87c3bcbd69a659dff743c06c40bba9e4a01.
 # PR #68 clean rebase onto merged main: full Builder revalidation for source head 0f5a89dfea7e8c265b2b19f0cf1db047d4a41611.
 name: Poll private goxboard
