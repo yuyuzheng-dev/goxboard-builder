@@ -1,5 +1,7 @@
 name: Poll private goxboard
 
+# PR #68/#69 persistence, scheduler, redaction and hidden-setting regression revalidation: 1b81216f736dfe4e3c6ad8365275c2f4c3fffcdf / b227defcd5ed5ea1a1a571e240180c673a7dcec1.
+
 # PR #69 runtime logging compile cleanup revalidation, source head 15d9936a6b6bab04c3ebe50a141d7917ec43a060.
 
 # Goxboard PR #68 custom scheduled commands and PR #69 runtime error events final full-matrix revalidation (2026-11-20), canonical gofmt heads 1939a1432b9aa99ff3898ae6e86d48dea716a870 and 185412901f797e7248da9c665a697f46c0d545b3.
