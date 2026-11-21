@@ -207,7 +207,11 @@ jobs:
             "$binary" version
             for config in "$@"; do
               echo "sing-box $version: checking $config"
-              "$binary" check -c "$config"
+              # Golden files intentionally use a readable Reality placeholder. Replace it only in the
+              # temporary native-core input so the core validates structure without weakening snapshots.
+              checked_config="$RUNNER_TEMP/sing-box-check-$version-$(basename "$config")"
+              sed 's/PUBLIC_KEY_BASE64URL/zCr4KWLwESlfCMeeFoBu3oPXaUS0vfhsJxQX0BLLH2A/g' "$config" > "$checked_config"
+              "$binary" check -c "$checked_config"
             done
           }
 
