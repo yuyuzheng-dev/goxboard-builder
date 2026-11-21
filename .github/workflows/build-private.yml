@@ -238,7 +238,8 @@ jobs:
 
       - name: PostgreSQL/MySQL deposit transaction integration tests
         working-directory: source
-        run: go test -tags integration -race -run '^TestIntegrationDepositTransactionAtomicityAcrossSQLDatabases
+        run: go test -tags integration -race -run TestIntegrationDepositTransactionAtomicityAcrossSQLDatabases ./internal/service/order/ -count=1 -v
+
   web:
     name: Web (install, audit, lint, typecheck, test, build)
     runs-on: ${{ inputs.runner || 'ubuntu-24.04' }}
@@ -468,8 +469,6 @@ jobs:
 
             core.info('Private commit status: ' + (passed ? 'success' : 'failure'));
             core.info('Job results: ' + JSON.stringify(results));
- ./internal/service/order/ -count=1 -v
-
   web:
     name: Web (install, audit, lint, typecheck, test, build)
     runs-on: ${{ inputs.runner || 'ubuntu-24.04' }}
