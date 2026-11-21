@@ -1,3 +1,4 @@
+# Goxboard PR #75 SQL integration fixture reuses one payment method: source head 932b9175dec7677d5b57991ddd081bf96f83e4ab.
 # Goxboard PR #75 final docs wording and verified balance purchase/renewal test head: source head 828278914fdda389ee7ff9914f5108171ba6d320.
 # Goxboard PR #75 balance-funded purchase and renewal tests after compile cleanup: source head 9c30bdb98f6dcee07e951fc799540c4c51d42fc4.
 # Goxboard PR #75 deposited balance new-purchase and renewal regression: source head a48ba8031ac82faa46bce03042ce5e0f996febe8.
