@@ -1,3 +1,4 @@
+# Goxboard PR #74 strict-mode-safe account balance refresh regression test: source head 98f7b09660ff5f2c85215460311d4e3964b1c9cd.
 # Goxboard PR #74 refresh auth balance when switching between completed deposit orders: source head 0c6d876e5e38cb15edf1a223184321c8241d6284.
 # Goxboard PR #75 SQL integration fixture reuses one payment method: source head 932b9175dec7677d5b57991ddd081bf96f83e4ab.
 # Goxboard PR #75 final docs wording and verified balance purchase/renewal test head: source head 828278914fdda389ee7ff9914f5108171ba6d320.
