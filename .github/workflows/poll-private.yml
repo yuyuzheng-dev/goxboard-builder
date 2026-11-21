@@ -1,3 +1,4 @@
+# Revalidate Goxboard PR #70 after fixing the system-error retention test, read-only sing-box alias, legacy revision migration, and process-group timeout coverage (source head b39c79f86adad28f8519427a930481a5b28fe834).
 # Goxboard PR #71 final validation after sing-box source-support gating: source head c3510b1dc7bbd4b541cb5f1d58b0c89c35d2a6bd.
 # Goxboard PR #71 final full-matrix validation: source head 08209743202171838a12393a87a6dbb92732be78.
 # Goxboard PR #71 revalidation after native sing-box placeholder handling: source head 7703b53deb96d3512ce56adb08767db4a9c6d821.
