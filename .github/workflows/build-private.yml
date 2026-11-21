@@ -238,7 +238,7 @@ jobs:
 
       - name: PostgreSQL/MySQL deposit transaction integration tests
         working-directory: source
-        run: go test -tags integration -race -run TestIntegrationDepositTransactionAtomicityAcrossSQLDatabases ./internal/service/order/ -count=1 -v
+        run: go test -tags integration -race -run '^TestIntegrationDeposit' ./internal/service/order/ -count=1 -v
 
   web:
     name: Web (install, audit, lint, typecheck, test, build)
