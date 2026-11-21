@@ -1,3 +1,4 @@
+# Goxboard PR #74 Lint parse fix validation: source head fa50b1c1eec2847695e4480b943da7e458b40dd9.
 # Goxboard PR #74 deposit UI and admin settings full Builder validation: source head 154fd408c072fe02ffa12cc6c5f0257e8ed3816e.
 # Revalidate Goxboard PR #73 after isolating SQL write-failure tests and using a balance-only CHECK constraint (source head 652eaf9c613c5d9e370469c3ff5abd04f76b2d8f).
 # Revalidate Goxboard PR #73 after adding PostgreSQL/MySQL deposit transaction atomicity tests (source head 116cb2f7322c007865c29bb76e0a314b4e6f4b9e).
