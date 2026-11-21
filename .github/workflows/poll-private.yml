@@ -544,4 +544,4 @@ jobs:
 # Revalidate Goxboard PR #64 full PR58 revert and security regression tests, 2026-11-19.
 
 # Full Builder validation on final Goxboard main SHA ab349140459be3ff0f63b30e2538bbd841669b72 after merging PR #64, 2026-11-19.
-# Goxboard PR #72 deposit model/settings PR-01 full Builder validation: source head 26127346328017812cbdfd3c4af1ec5f6af8cbc9.
+# Goxboard PR #72 deposit model/settings PR-01 full Builder validation: source head 3e1c76506085d16f8c6535bc7b1e3b661e39c4f1.
