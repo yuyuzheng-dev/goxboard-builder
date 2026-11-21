@@ -1,3 +1,4 @@
+# Goxboard PR #74 client-side deposit min/max validation fix: source head 78b62b9e89bad291cbeba464205ccf7437dd9424.
 # Goxboard PR #74 shop deposit flow integration test validation: source head 9348f54f4fd7a8948b36eef164d1004ee23fb90a.
 # Goxboard PR #74 decimal amount parser regression fix validation: source head be3a53873dc5559545ea07e4a1df50eabd74d929.
 # Goxboard PR #74 final UI labels and tier JSON hint validation: source head e3e49d606e2ef6950f0a32d782397b8430e7e4a4.
