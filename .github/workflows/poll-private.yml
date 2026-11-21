@@ -1,3 +1,4 @@
+# Revalidate Goxboard PR #70 exact head af1a8ad36ae48c6a1395bc10f563a576f2df84d8; use an absolute sleep binary in the process-group timeout regression test.
 # Revalidate Goxboard PR #70 exact head dc3c68b4c9cc1fc079fb5622773f8d2c311c1c74 after preventing legacy history from contaminating divergent versioned sing-box templates.
 # Revalidate Goxboard PR #70 after fixing the system-error retention test, read-only sing-box alias, legacy revision migration, and process-group timeout coverage (source head b39c79f86adad28f8519427a930481a5b28fe834).
 # Goxboard PR #71 final validation after sing-box source-support gating: source head c3510b1dc7bbd4b541cb5f1d58b0c89c35d2a6bd.
