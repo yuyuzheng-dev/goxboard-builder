@@ -1,3 +1,4 @@
+# Revalidate Goxboard PR #73 after adding PostgreSQL/MySQL deposit transaction atomicity tests (source head 116cb2f7322c007865c29bb76e0a314b4e6f4b9e).
 # Revalidate Goxboard PR #70 exact head 3e7d7fa8fb7dea0984dcf7865b9eec174ea7a949 after gofmt correction in the legacy sing-box compatibility regression test.
 # Revalidate Goxboard PR #70 exact head af1a8ad36ae48c6a1395bc10f563a576f2df84d8; use an absolute sleep binary in the process-group timeout regression test.
 # Revalidate Goxboard PR #70 exact head dc3c68b4c9cc1fc079fb5622773f8d2c311c1c74 after preventing legacy history from contaminating divergent versioned sing-box templates.
