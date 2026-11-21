@@ -546,3 +546,4 @@ jobs:
 # Full Builder validation on final Goxboard main SHA ab349140459be3ff0f63b30e2538bbd841669b72 after merging PR #64, 2026-11-19.
 # Goxboard PR #72 deposit model/settings PR-01 full Builder validation: source head 892c7ecaf432a91a62e6f28c31a542a0dc012c64.
 # Goxboard PR #73 deposit create/credit PR-02 full Builder validation: source head a0abb1c2ba5f1482eb6a3efa11d0d245f6d6e0c7.
+# Goxboard PR #73 deposit create/credit PR-02 full Builder validation: source head fc9aad26e4a6b75b990f547ec801c098a0593067.
