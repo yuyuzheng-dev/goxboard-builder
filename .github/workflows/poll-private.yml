@@ -606,3 +606,5 @@ jobs:
 # Re-run PR02 after aligning allocator fixtures with active subscription eligibility; source head a0e56a5344ad92519a7e381ae41fa1c7ed69c18f.
 
 # Final PR02 CI: verify active-subscription fixture for expired add-on packages; source head 6e57354fbc21a5de3ee94c1794819a2346f2060a.
+
+# Final PR02 regression: ensure deleting a user removes order-backed traffic package grants; source head e1a7d3c3dfeeb01cf04dada1cc31b58ae2724c07.
