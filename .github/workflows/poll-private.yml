@@ -622,3 +622,5 @@ jobs:
 # Re-run exact PR02 source after correcting source SHA marker; source head 259ac2716939390c8460941fa49e40b2b1cbbdf0.
 
 # PR02 regression: load package-access test user into a concrete model value before generation; source head b4c0121a4bd9861067746267093891e62ac391cb.
+
+# Revalidate Goxboard PR #78 after replacing proxy-count assertion with direct node-access and exhausted-status checks; source head 5487f1faf6a0e2f808b83dd2db693e36ea9c3552.
