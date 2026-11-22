@@ -614,3 +614,5 @@ jobs:
 # Final PR02 validation: update model count and seed UserTrafficPackage in DB copy fixtures; source head 50ea45d3f559d7cd23605621c7321ef6dff4e8ac.
 
 # Final PR02 CI: validate SQLite-safe traffic package counter chunking; source head 2e39e29cee1bb137a70481fce6edeeab484e4a70.
+
+# Final PR02 order snapshot regression: package orders must not retain primary-plan replacement fields; source head 385925dcc94f628a2dd2f023e67c3b92dfcef2d1.
