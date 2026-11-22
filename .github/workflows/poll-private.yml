@@ -572,3 +572,5 @@ jobs:
 # Revalidate Goxboard PR #76 after final gofmt adjustment at source head d0fa6f93f9c165d57df66c8bd89affe66aa7c840 (2026-11-22).
 
 # Revalidate Goxboard PR #76 with Xboard importer plan-type inference at source head 9fc2867e6c5451e1c268ad317c7503f1be024eeb (2026-11-22).
+
+# Final-head retry for Goxboard PR #76 at 9fc2867e6c5451e1c268ad317c7503f1be024eeb (2026-11-22T04:37Z).
