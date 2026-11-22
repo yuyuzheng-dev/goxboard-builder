@@ -612,3 +612,5 @@ jobs:
 # Final PR02 validation: use a decodable VMess node fixture in the package-backed subscription regression; source head 016e80377f92d4f8c5e78a78b67418f60d81e398.
 
 # Final PR02 validation: update model count and seed UserTrafficPackage in DB copy fixtures; source head 50ea45d3f559d7cd23605621c7321ef6dff4e8ac.
+
+# Final PR02 CI: validate SQLite-safe traffic package counter chunking; source head 2e39e29cee1bb137a70481fce6edeeab484e4a70.
