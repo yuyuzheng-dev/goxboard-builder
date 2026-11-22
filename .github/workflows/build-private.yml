@@ -147,7 +147,8 @@ jobs:
         with:
           go-version: "1.27.x"
           check-latest: true
-          cache: false
+          cache: true
+          cache-dependency-path: source/go.sum
 
       - name: gofmt
         working-directory: source
@@ -241,7 +242,7 @@ jobs:
         run: go test -tags integration -race -run '^TestIntegrationDeposit' ./internal/service/order/ -count=1 -v
 
   web:
-    name: Web (install, audit, lint, typecheck, test, build)
+    name: Web quality (install, audit, lint, typecheck, test)
     runs-on: ${{ inputs.runner || 'ubuntu-24.04' }}
     timeout-minutes: 35
     steps:
@@ -274,6 +275,8 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: 24
+          cache: pnpm
+          cache-dependency-path: source/web/pnpm-lock.yaml
 
       - name: Install
         if: steps.detect.outputs.present == 'true'
@@ -304,12 +307,62 @@ jobs:
         if: steps.detect.outputs.present == 'true'
         run: pnpm -C source/web test
 
-      - name: Build
-        if: steps.detect.outputs.present == 'true'
+  web_build:
+    name: Web build (PRERENDER=0, no Chromium)
+    runs-on: ${{ inputs.runner || 'ubuntu-24.04' }}
+    timeout-minutes: 25
+    steps:
+      - name: Checkout private source at exact commit
+        uses: actions/checkout@v7
+        with:
+          repository: yuyuzheng-dev/goxboard
+          ref: ${{ inputs.sha }}
+          token: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
+          persist-credentials: false
+          path: source
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 12
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: source/web/pnpm-lock.yaml
+
+      - name: Install
+        run: pnpm -C source/web install --frozen-lockfile
+
+      - name: Build SPA without Chromium prerendering
+        env:
+          PRERENDER: "0"
         run: pnpm -C source/web build
 
+      - name: Verify non-prerendered SPA output
+        run: |
+          set -euo pipefail
+          test -s source/web/dist/index.html
+          for snapshot in login register forgot; do
+            if [[ -e "source/web/dist/$snapshot/index.html" ]]; then
+              echo "::error::CI build unexpectedly prerendered /$snapshot"
+              exit 1
+            fi
+          done
+
+      - name: Upload exact-SHA frontend artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: goxboard-web-dist-${{ inputs.sha }}
+          path: source/web/dist/
+          if-no-files-found: error
+          retention-days: 1
+
   docker:
-    name: Docker (production image smoke)
+    name: Docker (prebuilt frontend smoke)
+    needs: [web_build]
     runs-on: ${{ inputs.runner || 'ubuntu-24.04' }}
     timeout-minutes: 40
     steps:
@@ -332,17 +385,51 @@ jobs:
           persist-credentials: false
           path: base
 
+      - name: Download frontend artifact from the exact source SHA
+        uses: actions/download-artifact@v8
+        with:
+          name: goxboard-web-dist-${{ inputs.sha }}
+          path: source/web/dist
+
+      - name: Verify downloaded frontend artifact
+        run: |
+          set -euo pipefail
+          test -s source/web/dist/index.html
+          for snapshot in login register forgot; do
+            if [[ -e "source/web/dist/$snapshot/index.html" ]]; then
+              echo "::error::CI frontend artifact unexpectedly contains a prerendered /$snapshot snapshot"
+              exit 1
+            fi
+          done
+
+      - uses: docker/setup-buildx-action@v4
+
       - name: Set up Go for cgroup runtime probe
         uses: actions/setup-go@v6
         with:
           go-version: "1.27.x"
           check-latest: true
-          cache: false
+          cache: true
+          cache-dependency-path: source/go.sum
 
-      - name: Build runtime image
-        env:
-          VERSION: ci-${{ inputs.sha }}
-        run: docker build -f source/deploy/Dockerfile --build-arg "VERSION=$VERSION" -t goxboard:ci source
+      - name: Build runtime image from prebuilt frontend
+        uses: docker/build-push-action@v7
+        with:
+          context: source
+          file: source/deploy/Dockerfile
+          target: runtime-ci
+          platforms: linux/amd64
+          push: false
+          load: true
+          tags: goxboard:ci
+          build-args: |
+            VERSION=ci-${{ inputs.sha }}
+          cache-from: |
+            type=gha,scope=goxboard-ci
+            type=gha,scope=goxboard
+          cache-to: type=gha,scope=goxboard-ci,mode=max,ignore-error=true
+          provenance: false
+          sbom: false
 
       - name: Verify Docker CPU and memory limits are detected
         working-directory: source
@@ -395,6 +482,17 @@ jobs:
           [[ "$root_status" == "200" ]] || { echo "::error::SPA root returned $root_status"; exit 1; }
           grep -qi '<html' "$RUNNER_TEMP/index.html" || { echo "::error::SPA root is not HTML"; exit 1; }
 
+          # PR CI deliberately omits route snapshots. Verify both known and deep routes use the plain SPA shell.
+          for route in /login /dashboard; do
+            route_status="$(curl -sS -o "$RUNNER_TEMP/route.html" -w '%{http_code}' "http://127.0.0.1:18080$route")"
+            [[ "$route_status" == "200" ]] || { echo "::error::SPA route $route returned $route_status"; exit 1; }
+            grep -qi '<html' "$RUNNER_TEMP/route.html" || { echo "::error::SPA route $route did not return HTML"; exit 1; }
+            grep -q '<div id="root"></div>' "$RUNNER_TEMP/route.html" || {
+              echo "::error::SPA route $route did not return the non-prerendered shell"
+              exit 1
+            }
+          done
+
           # A parallel PR may still inherit the endpoint from its base branch.
           # Enforce removal when this PR removes it, and on every base that has already removed it.
           source_has_healthz=false
@@ -435,7 +533,7 @@ jobs:
   report:
     name: Report aggregate status to private commit
     if: always()
-    needs: [go, web, docker]
+    needs: [go, web, web_build, docker]
     runs-on: ${{ inputs.runner || 'ubuntu-24.04' }}
     timeout-minutes: 5
     steps:
@@ -448,11 +546,12 @@ jobs:
             const results = {
               go: '${{ needs.go.result }}',
               web: '${{ needs.web.result }}',
+              web_build: '${{ needs.web_build.result }}',
               docker: '${{ needs.docker.result }}'
             };
             const passed = Object.values(results).every(result => result === 'success');
             const description = passed
-              ? 'Go, Web, and Docker checks passed'
+              ? 'Go, Web quality/build, and Docker checks passed'
               : 'One or more build jobs failed or were cancelled';
             const targetUrl = context.serverUrl + '/' + context.repo.owner + '/' +
               context.repo.repo + '/actions/runs/' + context.runId;
