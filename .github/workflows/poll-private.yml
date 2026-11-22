@@ -580,3 +580,5 @@ jobs:
 # Revalidate PR 76 with explicit GORM model binding at source head c4d5e7f0495a1818452b43f25ea7639c2a739c4b (2026-11-22).
 
 # Revalidate PR 76 using explicit plans table for MySQL backfill at source head c15b33ef49f2724c81ad0d7a6b5da1ea56e84d7f (2026-11-22).
+
+# Revalidate Goxboard PR #76 after explicit SQL row scanning in plan-type backfill; source head 5775618c254b3ee3a0110b2cad23af1da363640e (2026-11-22).
