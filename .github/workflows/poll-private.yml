@@ -620,3 +620,5 @@ jobs:
 # Final PR02 CI after gofmt alignment of traffic package order snapshot fields; source head 259ac2716939390c8460941fa49e40b2b1c1bbdf0.
 
 # Re-run exact PR02 source after correcting source SHA marker; source head 259ac2716939390c8460941fa49e40b2b1cbbdf0.
+
+# PR02 regression: load package-access test user into a concrete model value before generation; source head b4c0121a4bd9861067746267093891e62ac391cb.
