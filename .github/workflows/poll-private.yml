@@ -604,3 +604,5 @@ jobs:
 # Re-run traffic package PR02 after correcting subscription test to ignore informational pseudo-nodes; source head 9f60e499e1658313c22a545a5a6daa28e10b35d1.
 
 # Re-run PR02 after aligning allocator fixtures with active subscription eligibility; source head a0e56a5344ad92519a7e381ae41fa1c7ed69c18f.
+
+# Final PR02 CI: verify active-subscription fixture for expired add-on packages; source head 6e57354fbc21a5de3ee94c1794819a2346f2060a.
