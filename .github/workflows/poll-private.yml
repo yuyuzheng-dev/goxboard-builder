@@ -590,3 +590,5 @@ jobs:
 # Revalidate Goxboard PR #77 after rebasing PR02 on main 1ed3a2d116c45a0a410764db89e382737e46391f; source head bca29e028510ddc235a24c78c83595cf7ef0909d.
 
 # Revalidate Goxboard PR #77 after Go formatting cleanup; source head b66358d7e2d636967f555c2bf2feac0ca94586ac.
+
+# Revalidate Goxboard PR #77 after gofmt alignment of both order structs; source head 88088d75b5f4d0498610b6fbdceeb269d3a81e0f.
