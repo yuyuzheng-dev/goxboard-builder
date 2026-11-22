@@ -578,3 +578,5 @@ jobs:
 # Revalidate PR 76 MySQL migration Select fix at source head 6051b903d0acd01ce4789940d7a446811ff2a698 (2026-11-22).
 
 # Revalidate PR 76 with explicit GORM model binding at source head c4d5e7f0495a1818452b43f25ea7639c2a739c4b (2026-11-22).
+
+# Revalidate PR 76 using explicit plans table for MySQL backfill at source head c15b33ef49f2724c81ad0d7a6b5da1ea56e84d7f (2026-11-22).
