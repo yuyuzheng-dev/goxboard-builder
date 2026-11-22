@@ -608,3 +608,5 @@ jobs:
 # Final PR02 CI: verify active-subscription fixture for expired add-on packages; source head 6e57354fbc21a5de3ee94c1794819a2346f2060a.
 
 # Final PR02 regression: ensure deleting a user removes order-backed traffic package grants; source head e1a7d3c3dfeeb01cf04dada1cc31b58ae2724c07.
+
+# Final PR02 validation: use a decodable VMess node fixture in the package-backed subscription regression; source head 016e80377f92d4f8c5e78a78b67418f60d81e398.
