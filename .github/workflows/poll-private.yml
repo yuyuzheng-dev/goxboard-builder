@@ -592,3 +592,5 @@ jobs:
 # Revalidate Goxboard PR #77 after Go formatting cleanup; source head b66358d7e2d636967f555c2bf2feac0ca94586ac.
 
 # Revalidate Goxboard PR #77 after gofmt alignment of both order structs; source head 88088d75b5f4d0498610b6fbdceeb269d3a81e0f.
+
+# Revalidate Goxboard traffic package PR02 after moving user package tests to external package; source head 341d00e03d6457c8022ce1d0f6bbca74ca77356b.
