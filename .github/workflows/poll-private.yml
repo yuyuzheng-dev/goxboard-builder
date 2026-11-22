@@ -626,3 +626,5 @@ jobs:
 # Revalidate Goxboard PR #78 after replacing proxy-count assertion with direct node-access and exhausted-status checks; source head 5487f1faf6a0e2f808b83dd2db693e36ea9c3552.
 
 # Revalidate Goxboard PR #80 early-cycle advancement after adding bounded overage processing; source head 2e86c13d33b7c4218c6a4eb79bd665834e4944ae (2026-11-22).
+
+# Revalidate Goxboard PR #80 after removing unused time import from SQL integration test; source head f01bbee2bb3be3ead06eaa2b68ced39f1bf7b480 (2026-11-22).
