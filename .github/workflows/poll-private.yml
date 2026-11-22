@@ -562,3 +562,5 @@ jobs:
 # Goxboard PR #72 deposit model/settings PR-01 full Builder validation: source head 892c7ecaf432a91a62e6f28c31a542a0dc012c64.
 # Goxboard PR #73 deposit create/credit PR-02 full Builder validation: source head a0abb1c2ba5f1482eb6a3efa11d0d245f6d6e0c7.
 # Goxboard PR #73 deposit create/credit PR-02 full Builder validation: source head fc9aad26e4a6b75b990f547ec801c098a0593067.
+
+# Revalidate Goxboard PR #76 native plan types PR-01 at source head 079b04b420fb257547cad8ad4de519704760c869 (2026-11-22).
