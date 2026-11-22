@@ -576,3 +576,5 @@ jobs:
 # Final-head retry for Goxboard PR #76 at 9fc2867e6c5451e1c268ad317c7503f1be024eeb (2026-11-22T04:37Z).
 
 # Revalidate PR 76 MySQL migration Select fix at source head 6051b903d0acd01ce4789940d7a446811ff2a698 (2026-11-22).
+
+# Revalidate PR 76 with explicit GORM model binding at source head c4d5e7f0495a1818452b43f25ea7639c2a739c4b (2026-11-22).
