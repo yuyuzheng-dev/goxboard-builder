@@ -618,3 +618,5 @@ jobs:
 # Final PR02 order snapshot regression: package orders must not retain primary-plan replacement fields; source head 385925dcc94f628a2dd2f023e67c3b92dfcef2d1.
 
 # Final PR02 CI after gofmt alignment of traffic package order snapshot fields; source head 259ac2716939390c8460941fa49e40b2b1c1bbdf0.
+
+# Re-run exact PR02 source after correcting source SHA marker; source head 259ac2716939390c8460941fa49e40b2b1cbbdf0.
