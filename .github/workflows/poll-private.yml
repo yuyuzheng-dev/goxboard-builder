@@ -566,3 +566,5 @@ jobs:
 # Revalidate Goxboard PR #76 native plan types PR-01 at source head 079b04b420fb257547cad8ad4de519704760c869 (2026-11-22).
 
 # Revalidate Goxboard PR #76 native plan types PR-01 at final source head c3d3ed110c00730b78aec1ffc9faa0bac831e3ce (2026-11-22).
+
+# Revalidate Goxboard PR #76 after gofmt fix at source head 56a3e289b6e6b9f13031560d103f03e1aaa7d7e9 (2026-11-22).
