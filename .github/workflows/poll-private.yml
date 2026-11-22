@@ -598,3 +598,5 @@ jobs:
 # Revalidate Goxboard traffic package PR02 after gofmt cleanup and cumulative usage fix; source head 598a202a66092ae7c6b4f1756d0e2ae8ee9c19ff.
 
 # Final revalidation for traffic package PR02 including cumulative usage totals and per-user allocation locks; source head cb61960a76737e221f36a89e3b73131004eb427c.
+
+# Final traffic package entitlement revocation and stale-node-report regression; source head 9967f915fe389ee69870132f53b756a698ac5c38.
