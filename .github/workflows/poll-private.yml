@@ -1,3 +1,8 @@
+# Goxboard PR #83 traffic-package validity field uses the labelled numeric textbox: source head 1c6d40ef8cc200b3e76fe6b1520d5bb4ac016dd4.
+# Goxboard PR #84 shop confirmation cleanup and order model gofmt: source head b1428d8b9c403199fd24cf2c4737fefe8776e80a.
+# Goxboard PR #85 merges latest PR-01/02 regression fixes and cycle safeguards: source head c23e8f882337ad32c32397e4c6a33e48cd0762d9.
+# Revalidate Goxboard subscription plan PRs 83-85 after test isolation, numeric field selector and canonical Go formatting (2026-11-23).
+
 # Goxboard PR #83 traffic-package validity field accessible regression: source head da268fb2508b698ba1bb0ab9216aeffd394d5683.
 # Goxboard PR #84 subscription entitlement order tests and Go formatting cleanup: source head ae57f8ddc28e5a634de87526250915ed4babed5b.
 # Goxboard PR #85 cycle advancement expiry, concurrency and final acceptance changes: source head c990c97cd59d2175b98e1dd48c6f0452deec4b28.
