@@ -1,3 +1,6 @@
+# Goxboard PR #85 final canonical gofmt source: 025708d64c8410983ca3fadc2c8cb4ab36127dcc.
+# Revalidate PR #85 after removing the final trailing blank line (2026-11-23).
+
 # Goxboard PR #85 canonical settings gofmt and reset-policy bypass regression source: 3b96f36e54ea3569a37f1ebb3368bd76df97f6ec.
 # Revalidate PR #85 after exact settings EOF formatting repair (2026-11-23).
 # Goxboard PR #83 traffic-package validity model source: 6a5c3b1c48c0cdb9e43e092577bf6f64caa7c147.
