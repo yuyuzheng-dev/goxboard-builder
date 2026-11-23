@@ -180,7 +180,7 @@ jobs:
           node-version: 24
           cache: pnpm
           cache-dependency-path: source/web/pnpm-lock.yaml
-      - uses: actions/setup-go@v6
+      - uses: actions/setup-go@v7
         with:
           go-version: "1.27.x"
           check-latest: true
