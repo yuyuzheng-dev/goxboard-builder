@@ -1,3 +1,8 @@
+# Goxboard PR #83 numeric validity field accessible-query regression source: 1c6d40ef8cc200b3e76fe6b1520d5bb4ac016dd4.
+# Goxboard PR #84 canonical grouped gofmt for order/user models and order tests source: 16f35f7bf8556004d52d2895025feac79c8e662f.
+# Goxboard PR #85 full subscription cycle safeguards and latest PR-01/02 fixes source: 9f63b3819bdf953c72556a610a9dcc70b7847a8a.
+# Revalidate PRs 83-85 after grouped Go formatter alignment and PR-03 branch synchronization (2026-11-23).
+
 # Goxboard PR #83 final validity numeric textbox regression source: 1c6d40ef8cc200b3e76fe6b1520d5bb4ac016dd4.
 # Goxboard PR #84 order model gofmt and shop confirmation test isolation source: 3ac6b4000fe3ae3323d3955b356312238962b0ba.
 # Goxboard PR #85 full subscription cycle safeguards atop current PR-01/02 source: a9e980e934dcae49d308564dfa3d76a0294b1a32.
