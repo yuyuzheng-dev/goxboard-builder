@@ -1,3 +1,6 @@
+# Goxboard PR #86 admin plan sheet visual polish + themed card regression tests: source head cc6ac475c81ca88000cb228fe077979facd86937.
+# Revalidate frontend lint/typecheck/tests/build and Docker smoke for PR #86 (2026-11-23).
+
 # Goxboard PR #83 final SQL migration-scope head: d224d006694fc58009611d0488bf9b593c45b6d7.
 # Goxboard PR #84 final synchronized head: fcfe6037683a1a0c82a5e99ed4f06e6004b9db3c.
 # Goxboard PR #85 final synchronized head: e802546570cd58afe83627d4a39b9844a05e3d75.
