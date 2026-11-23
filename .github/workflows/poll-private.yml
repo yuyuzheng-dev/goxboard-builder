@@ -1,3 +1,6 @@
+# Goxboard PR #85 synchronized stacked head: 003d43aa3e80ca86a1b444f0f6c7c7fa5e918bf3.
+# Final full-matrix validation after merging current PR #84 ancestry into PR #85 (2026-11-23).
+
 # Goxboard PR #85 final canonical gofmt source: 025708d64c8410983ca3fadc2c8cb4ab36127dcc.
 # Revalidate PR #85 after removing the final trailing blank line (2026-11-23).
 
