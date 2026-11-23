@@ -636,3 +636,5 @@ jobs:
 # Revalidate Goxboard PR #81 after Xboard importer plan inference boundary fix; source head 2adecbb9e890fbd63724f333040d35f31820eef8 (2026-11-23).
 
 # Revalidate Goxboard PR #81 after final importer gofmt cleanup; source head ad2f4750c7df843e6c170991c871588419fa00c5 (2026-11-23).
+
+# Revalidate Goxboard PR #81 after removing retired traffic-grant test fixtures; source head dfa9caf40f6721334e5d2eb3824c99280ec2bd31 (2026-11-23).
