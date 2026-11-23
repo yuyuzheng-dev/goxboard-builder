@@ -634,3 +634,5 @@ jobs:
 # Revalidate Goxboard PR #81 after unified node eligibility fix; source head 1f5b7573338f56d3ea65ede2ebddfded6b598862 (2026-11-23).
 
 # Revalidate Goxboard PR #81 after Xboard importer plan inference boundary fix; source head 2adecbb9e890fbd63724f333040d35f31820eef8 (2026-11-23).
+
+# Revalidate Goxboard PR #81 after final importer gofmt cleanup; source head ad2f4750c7df843e6c170991c871588419fa00c5 (2026-11-23).
