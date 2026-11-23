@@ -1,3 +1,8 @@
+# Goxboard PR #83 traffic-package validity field accessible regression: source head da268fb2508b698ba1bb0ab9216aeffd394d5683.
+# Goxboard PR #84 subscription entitlement order tests and Go formatting cleanup: source head ae57f8ddc28e5a634de87526250915ed4babed5b.
+# Goxboard PR #85 cycle advancement expiry, concurrency and final acceptance changes: source head c990c97cd59d2175b98e1dd48c6f0452deec4b28.
+# Revalidate Goxboard PR #83/#84/#85 after subscription cycle, entitlement and Builder fixture fixes (2026-11-23).
+
 # Goxboard PR #74 strict-mode-safe account balance refresh regression test: source head 98f7b09660ff5f2c85215460311d4e3964b1c9cd.
 # Goxboard PR #74 refresh auth balance when switching between completed deposit orders: source head 0c6d876e5e38cb15edf1a223184321c8241d6284.
 # Goxboard PR #75 SQL integration fixture reuses one payment method: source head 932b9175dec7677d5b57991ddd081bf96f83e4ab.
