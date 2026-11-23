@@ -1,3 +1,6 @@
+# Goxboard PR #85 final canonical import grouping head: 1a23eaae2827a6ec8c2ef45b7ffa62a0d603cb60.
+# Revalidate PR #85 after exact gofmt import grouping repair (2026-11-23).
+
 # Goxboard PR #84 canonical vet-fix head: 3b495d8467c67f45b441e076596a0bfbf4e238ae.
 # Goxboard PR #85 synchronized canonical head: 72ce65e2a766628ca6a2d2e23a871e764360aeb4.
 # Revalidate after retaining the shared GORM callback import (2026-11-23).
