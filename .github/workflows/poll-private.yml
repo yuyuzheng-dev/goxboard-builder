@@ -1,4 +1,8 @@
 # Goxboard PR #83 traffic-package validity model source: 6a5c3b1c48c0cdb9e43e092577bf6f64caa7c147.
+# Goxboard PR #84 canonical gofmt repair source: 9075739848f3fc72591267b47742099c784dad26.
+# Goxboard PR #85 cycle safeguards, gofmt repair and reset-policy bypass fix source: 498858e0a35e7a8f660e07560dc87cbdced20975.
+# Revalidate PRs 83-85 after exact gofmt output repair (2026-11-23).
+# Goxboard PR #83 traffic-package validity model source: 6a5c3b1c48c0cdb9e43e092577bf6f64caa7c147.
 # Goxboard PR #84 entitlement state machine formatting fixes source: 894027d65eaadaf42944318ad32c77a515273391.
 # Goxboard PR #85 cycle safeguards and reset-policy bypass fix source: d1925c9c6058579f44d111a9fafc4dd17f6781b7.
 # Revalidate PRs 83-85 after final code review fixes (2026-11-23).
