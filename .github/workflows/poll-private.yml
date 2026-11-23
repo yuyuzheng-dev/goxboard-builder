@@ -628,3 +628,5 @@ jobs:
 # Revalidate Goxboard PR #80 early-cycle advancement after adding bounded overage processing; source head 2e86c13d33b7c4218c6a4eb79bd665834e4944ae (2026-11-22).
 
 # Revalidate Goxboard PR #80 after removing unused time import from SQL integration test; source head f01bbee2bb3be3ead06eaa2b68ced39f1bf7b480 (2026-11-22).
+
+# Revalidate Goxboard PR #81 unified subscription lifecycle CI cleanup; source head 4eb81f7b3ebfdb1bf4190c1d06aa1c539c60efd7 (2026-11-23).
