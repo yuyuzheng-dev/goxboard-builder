@@ -648,3 +648,5 @@ jobs:
 # Goxboard PR #82 server-authoritative settlement preview full Builder validation; source head 64a4405e09cdbdec938772b2b0957126f0598b5d (2026-11-23).
 
 # Revalidate Goxboard PR #82 after lint and coupon counter type fixes; source head cfd9acc52a7fa8037ce4fd5f47f401c3de7c00e7 (2026-11-23).
+
+# Revalidate Goxboard PR #82 after invalid-coupon removal flow and regression test; source head 97622a8bc77c3ced2a91a7060aa064d004aa8384 (2026-11-23).
