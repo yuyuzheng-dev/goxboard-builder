@@ -1,3 +1,8 @@
+# Goxboard PR #83 final validity numeric textbox regression source: 1c6d40ef8cc200b3e76fe6b1520d5bb4ac016dd4.
+# Goxboard PR #84 order model gofmt and shop confirmation test isolation source: 3ac6b4000fe3ae3323d3955b356312238962b0ba.
+# Goxboard PR #85 full subscription cycle safeguards atop current PR-01/02 source: a9e980e934dcae49d308564dfa3d76a0294b1a32.
+# Revalidate PRs 83-85 after order model tag alignment and merged latest PR-01/02 heads (2026-11-23).
+
 # Goxboard PR #83 traffic-package validity field uses the labelled numeric textbox: source head 1c6d40ef8cc200b3e76fe6b1520d5bb4ac016dd4.
 # Goxboard PR #84 shop confirmation cleanup and order model gofmt: source head b1428d8b9c403199fd24cf2c4737fefe8776e80a.
 # Goxboard PR #85 merges latest PR-01/02 regression fixes and cycle safeguards: source head c23e8f882337ad32c32397e4c6a33e48cd0762d9.
