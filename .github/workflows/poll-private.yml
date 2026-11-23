@@ -1,3 +1,7 @@
+# Goxboard PR #83 traffic-package validity model source: 6a5c3b1c48c0cdb9e43e092577bf6f64caa7c147.
+# Goxboard PR #84 entitlement state machine formatting fixes source: 894027d65eaadaf42944318ad32c77a515273391.
+# Goxboard PR #85 cycle safeguards and reset-policy bypass fix source: d1925c9c6058579f44d111a9fafc4dd17f6781b7.
+# Revalidate PRs 83-85 after final code review fixes (2026-11-23).
 # Goxboard PR #83 numeric validity field accessible-query regression source: 1c6d40ef8cc200b3e76fe6b1520d5bb4ac016dd4.
 # Goxboard PR #84 canonical grouped gofmt for order/user models and order tests source: 16f35f7bf8556004d52d2895025feac79c8e662f.
 # Goxboard PR #85 full subscription cycle safeguards and latest PR-01/02 fixes source: 9f63b3819bdf953c72556a610a9dcc70b7847a8a.
