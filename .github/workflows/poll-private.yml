@@ -644,3 +644,5 @@ jobs:
 # Revalidate Goxboard PR #81 after aligning order replacement scenarios; source head ea2c2700cf52316277600f1d57fbcd53767ce8c4 (2026-11-23).
 
 # Final post-merge full Builder validation for Goxboard main SHA 5d18976d6bad788dd7154014af534dcf3060c965 after PR #81 merge (2026-11-23).
+
+# Goxboard PR #82 server-authoritative settlement preview full Builder validation; source head 64a4405e09cdbdec938772b2b0957126f0598b5d (2026-11-23).
