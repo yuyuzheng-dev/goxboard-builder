@@ -1,3 +1,7 @@
+# Goxboard PR #84 canonical vet-fix head: 3b495d8467c67f45b441e076596a0bfbf4e238ae.
+# Goxboard PR #85 synchronized canonical head: 72ce65e2a766628ca6a2d2e23a871e764360aeb4.
+# Revalidate after retaining the shared GORM callback import (2026-11-23).
+
 # Goxboard PR #84 final Race regression fixtures: dd54b22ca92cf2fb3b880ca1e4649de2c4cbb96b.
 # Goxboard PR #85 synchronized final head: 3901178eb9cbdd9864b1ac449a12121b5fff6959.
 # Revalidate the complete subscription plan matrix after account-snapshot and typed-plan fixture repairs (2026-11-23).
