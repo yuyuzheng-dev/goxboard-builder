@@ -1,3 +1,8 @@
+# Goxboard PR #83 final SQL migration-scope head: d224d006694fc58009611d0488bf9b593c45b6d7.
+# Goxboard PR #84 final synchronized head: fcfe6037683a1a0c82a5e99ed4f06e6004b9db3c.
+# Goxboard PR #85 final synchronized head: e802546570cd58afe83627d4a39b9844a05e3d75.
+# Revalidate final stack after correcting PostgreSQL/MySQL PR-01 migration scope (2026-11-23).
+
 # Goxboard PR #83 corrected migration-scope head: 1f1cfda263ab83405e015fe20a60581290379120.
 # Goxboard PR #84 synchronized stacked head: 16c77c18f817626ee026fa0d1bb8014170a1693e.
 # Goxboard PR #85 synchronized stacked head: 6a4e187696ffc579fd69f9f1fcd15ac2e3de16a8.
