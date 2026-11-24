@@ -1,3 +1,4 @@
+# Goxboard PR #101 final regression-test correction source 71f45d8f957c28c5fa501ac3c02758d9ae5e230d (2026-11-24).
 # Goxboard PR #98 current exact source head ba1239ace0c4e0e214751224d3ba66e1d63b4410; revalidate after canonical gofmt correction (2026-11-24).
 # Goxboard PR #86 admin plan sheet visual polish + themed card regression tests: source head cc6ac475c81ca88000cb228fe077979facd86937.
 # Revalidate frontend lint/typecheck/tests/build and Docker smoke for PR #86 (2026-11-23).
