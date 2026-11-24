@@ -371,9 +371,28 @@ jobs:
                 .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))[0];
               if (previous && !force) {
                 const pendingAge = Date.now() - Date.parse(previous.created_at);
-                if (previous.state !== 'pending' || pendingAge < 45 * 60 * 1000) {
+                if (previous.state === 'pending' && pendingAge < 45 * 60 * 1000) {
                   skipped++;
                   continue;
+                }
+
+                // A completed status belongs to the Builder workflow revision that
+                // produced its run. Revalidate the same source SHA when Builder changes.
+                const runMatch = String(previous.target_url || '').match(/\\/actions\\/runs\\/(\\d+)(?:[/?#]|$)/);
+                if (previous.state !== 'pending' && runMatch) {
+                  try {
+                    const previousRun = await github.rest.actions.getWorkflowRun({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      run_id: Number(runMatch[1])
+                    });
+                    if (previousRun.data.head_sha === context.sha) {
+                      skipped++;
+                      continue;
+                    }
+                  } catch (error) {
+                    core.warning('Could not compare Builder revision for ' + candidate.sha + ': ' + error.message);
+                  }
                 }
               }
 
