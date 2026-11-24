@@ -94,6 +94,9 @@
 # PR #68 clean rebase onto merged main: full Builder revalidation for source head 0f5a89dfea7e8c265b2b19f0cf1db047d4a41611.
 name: Poll private goxboard
 
+# Targeted validation trigger for Goxboard PR #99 (2026-11-24).
+# Validate the exact rebased source head 76f18d6906f13f0bfbd01fd61f79e53c2a98b96b.
+
 # PR #68/#69 complete DB-copy schedule-control and run-history fixtures: f776c434cebf2457716f13b77fb47ab979a517d6 / a66e1689c0ad2539687afd42ed240d70e384d51d.
 
 # PR #69 runtime logging compile cleanup revalidation, source head 15d9936a6b6bab04c3ebe50a141d7917ec43a060.
