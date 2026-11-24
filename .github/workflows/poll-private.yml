@@ -734,3 +734,5 @@ jobs:
 # Revalidate Goxboard PR #82 after wiring preview coupon errors into field validation; source head b5fe391689a2ffcdd7410d1d3b7685912c9e08b8 (2026-11-23).
 
 # Requeue Goxboard PR #96 after gofmt correction, 2026-11-24.
+
+# Requeue Goxboard PR #96 after TTLMap expiry semantics fix, 2026-11-24.
