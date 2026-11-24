@@ -94,6 +94,8 @@
 # PR #68 clean rebase onto merged main: full Builder revalidation for source head 0f5a89dfea7e8c265b2b19f0cf1db047d4a41611.
 name: Poll private goxboard
 
+# Targeted validation trigger for Goxboard PR #97 (2026-11-24).
+
 # PR #68/#69 complete DB-copy schedule-control and run-history fixtures: f776c434cebf2457716f13b77fb47ab979a517d6 / a66e1689c0ad2539687afd42ed240d70e384d51d.
 
 # PR #69 runtime logging compile cleanup revalidation, source head 15d9936a6b6bab04c3ebe50a141d7917ec43a060.
@@ -228,7 +230,7 @@ jobs:
           SOURCE_TOKEN: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
           SOURCE_REF: ${{ inputs.ref }}
           FORCE: ${{ inputs.force }}
-          TARGET_PR: ''
+          TARGET_PR: '97'
           BUILD_RUNNER: ${{ inputs.runner || 'ubuntu-24.04' }}
         with:
           github-token: ${{ github.token }}
