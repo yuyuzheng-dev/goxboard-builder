@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: yuyuzheng-dev/goxboard
-          ref: 48c1571833e3f6866e36d56525beb201f466f2dc
+          ref: 0339bcb5b07e9c3b34c1f105e2d5b4f35d7aa2b0
           token: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
           path: goxboard
 
