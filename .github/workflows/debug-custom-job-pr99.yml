@@ -1,0 +1,35 @@
+name: Debug Goxboard PR99 custom job tests
+
+on:
+  push:
+    branches:
+      - ci/debug-custom-job-pr99-20261124
+    paths:
+      - .github/workflows/debug-custom-job-pr99.yml
+
+permissions:
+  contents: read
+
+jobs:
+  custom-job-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact private Goxboard source
+        uses: actions/checkout@v7
+        with:
+          repository: yuyuzheng-dev/goxboard
+          ref: 48c1571833e3f6866e36d56525beb201f466f2dc
+          token: ${{ secrets.GOXBOARD_ACCESS_TOKEN }}
+          path: goxboard
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version: '1.27.4'
+          cache: true
+          cache-dependency-path: goxboard/go.sum
+
+      - name: Run custom scheduled job regressions with race detector
+        working-directory: goxboard
+        run: go test ./internal/app ./internal/api/admin -run 'Test(CustomScheduledJob|PreparedCustomScheduledJob|CustomJobExecHelperProcess|AdminCustomScheduledJobLifecycle)' -race -count=1 -v
