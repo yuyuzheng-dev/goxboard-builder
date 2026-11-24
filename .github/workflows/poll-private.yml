@@ -378,7 +378,7 @@ jobs:
 
                 // A completed status belongs to the Builder workflow revision that
                 // produced its run. Revalidate the same source SHA when Builder changes.
-                const runMatch = String(previous.target_url || '').match(/\\/actions\\/runs\\/(\\d+)(?:[/?#]|$)/);
+                const runMatch = String(previous.target_url || '').match(/\/actions\/runs\/(\d+)(?:[/?#]|$)/);
                 if (previous.state !== 'pending' && runMatch) {
                   try {
                     const previousRun = await github.rest.actions.getWorkflowRun({
