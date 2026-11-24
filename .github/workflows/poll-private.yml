@@ -95,6 +95,7 @@
 name: Poll private goxboard
 
 # Targeted validation trigger for Goxboard PR #98 (2026-11-24).
+# Revalidate exact source head after the gofmt-only correction.
 
 # PR #68/#69 complete DB-copy schedule-control and run-history fixtures: f776c434cebf2457716f13b77fb47ab979a517d6 / a66e1689c0ad2539687afd42ed240d70e384d51d.
 
