@@ -1,3 +1,4 @@
+# Goxboard PR #105 admin online endpoint regression-test head 2ee34f777ff3956e4deeb2656cbed01776fc656b; validate the exact updated source (2026-11-25).
 # Goxboard PR #105 latest online-presence regression-test head 4633c104a81e8c05257c9052d667cf70daef2245; queue exact-head validation (2026-11-25).
 # Goxboard PR #105 admin user management and online-device full-matrix validation, source head 7fefcc51fd0d77d215e93684028f0181c2ede477 (2026-11-25).
 # Goxboard PR #98 current exact source head ba1239ace0c4e0e214751224d3ba66e1d63b4410; revalidate after canonical gofmt correction (2026-11-24).
