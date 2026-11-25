@@ -1,4 +1,4 @@
-# Goxboard PR #109 BE-01..BE-05 regression-test source head a6b6bdf7c95b81eb3e1b6e6f47ccb45c1626959c; retry after transient GitHub dispatch 500 (2026-11-25).
+# Goxboard PR #109 BE-01..BE-05 regression-test source head 06e0763f32c38d962244c16436e8c428b1037ab4; retry transient GitHub Actions dispatch 5xx (2026-11-25).
 # Goxboard PR #108 referral email search fixture correction after full Race test: revalidate exact source head 0084e70d10eae94b034d224a5fdee0f78a3abfbe (2026-11-25).
 # Goxboard PR #107 assigned-order callback fixture correction: use gateway merchant trade number with attempt_id; validate exact source head aac8b8e487c66a174e0d19433934c99897714431 (2026-11-25).
 # Goxboard PR #107 admin user plan assignment: pending order, owner-only checkout and full entitlement fulfilment regression; validate exact source head 74da33d5dd27147f21746c9a81af4b7a7606d56a (2026-11-25).
@@ -374,6 +374,24 @@ jobs:
             const releaseTargetUrl = context.serverUrl + '/' + context.repo.owner + '/' + context.repo.repo +
               '/actions/workflows/release-private.yml';
 
+            // GitHub's workflow-dispatch endpoint can transiently return HTTP 5xx.
+            // Retry only server errors; validation and permission errors remain immediate.
+            async function dispatchWorkflowWithRetry(options) {
+              for (let attempt = 1; attempt <= 4; attempt++) {
+                try {
+                  await github.rest.actions.createWorkflowDispatch(options);
+                  return;
+                } catch (error) {
+                  const status = error.status || error.response?.status || 0;
+                  if (status < 500 || attempt === 4) throw error;
+                  const delay = 5000 * attempt;
+                  core.warning('Workflow dispatch returned HTTP ' + status +
+                    '; retrying in ' + delay + 'ms (' + attempt + '/3).');
+                  await new Promise(resolve => setTimeout(resolve, delay));
+                }
+              }
+            }
+
             for (const candidate of candidates.values()) {
               const statuses = await sourceApi(base + '/commits/' + candidate.sha + '/statuses?per_page=100');
               const previous = statuses
@@ -418,7 +436,7 @@ jobs:
               });
 
               try {
-                await github.rest.actions.createWorkflowDispatch({
+                await dispatchWorkflowWithRetry({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   workflow_id: 'build-private.yml',
@@ -491,7 +509,7 @@ jobs:
                 });
 
                 try {
-                  await github.rest.actions.createWorkflowDispatch({
+                  await dispatchWorkflowWithRetry({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
                     workflow_id: 'benchmark-private.yml',
@@ -555,7 +573,7 @@ jobs:
               });
 
               try {
-                await github.rest.actions.createWorkflowDispatch({
+                await dispatchWorkflowWithRetry({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   workflow_id: 'release-private.yml',
