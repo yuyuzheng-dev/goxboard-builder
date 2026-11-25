@@ -1,3 +1,4 @@
+# Goxboard PR #107 admin user plan assignment: pending order, owner-only checkout and full entitlement fulfilment regression; validate exact source head 74da33d5dd27147f21746c9a81af4b7a7606d56a (2026-11-25).
 # Goxboard PR #106 Dashboard plan status, online-device presence, type-specific purchase prompts, and documented subscription API; validate exact source head 3cfc207ee2ad084a9965dfa7f6c29d764ab64133 (2026-11-25).
 # Goxboard PR #105 Go Vet fix and final regression-test head 485584ec71fea45fdc22a603ced53b2fad3cf7a8; validate exact current head (2026-11-25).
 # Goxboard PR #105 admin online endpoint regression-test head 2ee34f777ff3956e4deeb2656cbed01776fc656b; validate the exact updated source (2026-11-25).
