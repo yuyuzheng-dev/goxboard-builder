@@ -1,3 +1,4 @@
+# Goxboard PR #106 Dashboard plan status, online-device presence, and shop checkout; validate exact source head 9fbafc549b1e29c9d54e24077fa992a8e7ada284 (2026-11-25).
 # Goxboard PR #105 Go Vet fix and final regression-test head 485584ec71fea45fdc22a603ced53b2fad3cf7a8; validate exact current head (2026-11-25).
 # Goxboard PR #105 admin online endpoint regression-test head 2ee34f777ff3956e4deeb2656cbed01776fc656b; validate the exact updated source (2026-11-25).
 # Goxboard PR #105 latest online-presence regression-test head 4633c104a81e8c05257c9052d667cf70daef2245; queue exact-head validation (2026-11-25).
