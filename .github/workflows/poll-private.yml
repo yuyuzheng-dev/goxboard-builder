@@ -788,3 +788,4 @@ jobs:
 # Revalidate Goxboard PR #116 after Go formatting and shop-page React purity fixes; source head f3e14977a206ea133463accfbd0b8e28d7d7581b (2026-11-26).
 # Revalidate Goxboard PR #116 after final shop request gofmt alignment; source head 8112015e615f6cf128263df9f107ba621f2b4c5b (2026-11-26).
 # Revalidate Goxboard PR #116 after preserving the legacy test-fixture current-plan fallback; source head 72996a19eeca507b066495c8d62d7ba2d2c92fa8 (2026-11-26).
+# Revalidate Goxboard PR #116 with server-accurate sold-out shop test fixture; source head 39d284711f2f416d6ba7101ff97c790c171b80e0 (2026-11-26).
