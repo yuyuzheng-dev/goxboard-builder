@@ -790,3 +790,4 @@ jobs:
 # Revalidate Goxboard PR #116 after preserving the legacy test-fixture current-plan fallback; source head 72996a19eeca507b066495c8d62d7ba2d2c92fa8 (2026-11-26).
 # Revalidate Goxboard PR #116 with server-accurate sold-out shop test fixture; source head 39d284711f2f416d6ba7101ff97c790c171b80e0 (2026-11-26).
 # Revalidate Goxboard PR #116 after API fixtures, immutable-currency withdrawal setup, UTC renewal and stale test expectations were corrected; source head dfc237411f3384c1622d83ce28d5ccae9f75a42e (2026-11-26).
+# Revalidate Goxboard PR #116 after final Go test formatting adjustment; source head ad74367710f9ff8cfdafadbe0134141d23ba7d4a (2026-11-26).
