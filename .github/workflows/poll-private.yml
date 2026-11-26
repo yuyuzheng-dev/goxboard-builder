@@ -1,3 +1,4 @@
+# Goxboard PR #112 legacy reset-order compatibility and deadline backfill: source head e4370a37589cb3a801d87134af2777a6264c74ee (2026-11-26).
 # Goxboard PR #109 BE-01..BE-05 regression-test source head 8f1560723509a28d3b2f109b8d07246de188b9a4; nullable callback-verification deadline for legacy MySQL copies (2026-11-25).
 # Goxboard PR #108 referral email search fixture correction after full Race test: revalidate exact source head 0084e70d10eae94b034d224a5fdee0f78a3abfbe (2026-11-25).
 # Goxboard PR #107 assigned-order callback fixture correction: use gateway merchant trade number with attempt_id; validate exact source head aac8b8e487c66a174e0d19433934c99897714431 (2026-11-25).
