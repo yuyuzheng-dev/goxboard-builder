@@ -1,3 +1,4 @@
+# Goxboard PR #115 passkey single-use test now replays the matching successful credential: validate exact source head ab42cb5cecc0d0ea3f7c1359da2ce04f6ae9e8f2 (2026-11-26).
 # Goxboard PR #115 same-user alternate-session passkey ceremony regression isolation: validate exact source head 3bc112a36c2b47811651c414e5e9b7e6ec18ce35 (2026-11-26).
 # Goxboard PR #115 SMTP local-part byte-limit validation and boundary tests: validate exact source head 8d08f57524a7c9e0715000bda142165e1f997e81 (2026-11-26).
 # Goxboard PR #115 generated-email local-part boundary fix and regression: validate exact source head 7ee05401bce950105eb38693355d14bc35a4efa2 (2026-11-26).
