@@ -1,3 +1,4 @@
+# Goxboard PR #115 update TOTP wizard UI regression for required current-password proof: validate exact source head 9a06477a8150437e511caa292c5e3df36fa9789e (2026-11-26).
 # Goxboard PR #115 restore security-overview refresh after rejected TOTP setup: validate exact source head 3f9585f15fa0ccd94320e4941a48b75c93b79cc6 (2026-11-26).
 # Goxboard PR #115 React import syntax correction after TOTP setup UI refactor: validate exact source head 32affad91010c129cb0624a807f3c16d7f63dc2d (2026-11-26).
 # Goxboard PR #115 TOTP setup UI guards duplicate submissions and clears password after proof: validate exact source head 2ba5a4eac1685133c9fd6277573dab94b9898fa9 (2026-11-26).
