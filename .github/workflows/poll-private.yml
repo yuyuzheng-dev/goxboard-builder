@@ -1,3 +1,4 @@
+# Goxboard PR #115 TOTP setup UI guards duplicate submissions and clears password after proof: validate exact source head 2ba5a4eac1685133c9fd6277573dab94b9898fa9 (2026-11-26).
 # Goxboard PR #115 TOTP enrollment now requires current-password proof in API and UI: validate exact source head a0a166b30cd7643797a60017508235b7a18ff449 (2026-11-26).
 # Goxboard PR #115 passkey single-use test now replays the matching successful credential: validate exact source head ab42cb5cecc0d0ea3f7c1359da2ce04f6ae9e8f2 (2026-11-26).
 # Goxboard PR #115 same-user alternate-session passkey ceremony regression isolation: validate exact source head 3bc112a36c2b47811651c414e5e9b7e6ec18ce35 (2026-11-26).
