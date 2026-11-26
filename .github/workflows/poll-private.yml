@@ -771,3 +771,5 @@ jobs:
 # Revalidate Goxboard PR #114 after gofmt and React render-purity fixes at exact source head 6c3d93ee49b6898278a770095174e59e676f0772 (2026-11-26).
 
 # Revalidate Goxboard PR #114 after retaining the deposit balance selector at exact source head eb4e1c6a2a0ce42487356f9b5acd7ffb8290f331 (2026-11-26).
+
+# Revalidate Goxboard PR #114 after updating the sold-out API fixture at exact source head adec6bfc12b489388a3b7125d458dd781d736cea (2026-11-26).
