@@ -1,4 +1,4 @@
-# Goxboard PR #113 billing-cycle boundaries, UTC renewal semantics, base sync, and PostgreSQL/MySQL boundary/migration integration coverage: source head c0855687da7295ee1151d2a1a5f6e9cb59e545b6 (2026-11-26).
+# Goxboard PR #113 billing-cycle boundaries, UTC renewal semantics, base sync, and gofmt-correct PostgreSQL/MySQL integration coverage: source head 583e16948cde823d16442615ad326765d4675418 (2026-11-26).
 # Goxboard PR #112 legacy reset-order compatibility, deadline backfill and one-time replacement test expectation: source head 2a8b53803cbf21c26e4338e5df3df154b83681f6 (2026-11-26).
 # Goxboard PR #109 BE-01..BE-05 regression-test source head 8f1560723509a28d3b2f109b8d07246de188b9a4; nullable callback-verification deadline for legacy MySQL copies (2026-11-25).
 # Goxboard PR #108 referral email search fixture correction after full Race test: revalidate exact source head 0084e70d10eae94b034d224a5fdee0f78a3abfbe (2026-11-25).
