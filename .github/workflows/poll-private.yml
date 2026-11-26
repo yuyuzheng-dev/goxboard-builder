@@ -1,3 +1,4 @@
+# Goxboard PR #115 verified admin MFA, passkey reauthentication/session binding, current-RP enforcement and unique bulk passwords: revalidate exact source head 0bca4f54e5c74557a47f10ee93ae05f4c2fffd77 (2026-11-26).
 # Goxboard PR #113 billing-cycle boundaries, UTC renewal semantics, and isolated cross-dialect reset cleanup migration: source head 52e8a482aa1c4fa3358149e2b71210aded0595e9 (2026-11-26).
 # Goxboard PR #112 legacy reset-order compatibility, deadline backfill and one-time replacement test expectation: source head 2a8b53803cbf21c26e4338e5df3df154b83681f6 (2026-11-26).
 # Goxboard PR #109 BE-01..BE-05 regression-test source head 8f1560723509a28d3b2f109b8d07246de188b9a4; nullable callback-verification deadline for legacy MySQL copies (2026-11-25).
