@@ -1,3 +1,4 @@
+# Goxboard PR #115 generated-email local-part boundary fix and regression: validate exact source head 7ee05401bce950105eb38693355d14bc35a4efa2 (2026-11-26).
 # Goxboard PR #115 final auth-method and whitespace-TOTP regression fixes: revalidate exact source head 17fccd938512e9af58907a554df23da3e252c61b (2026-11-26).
 # Goxboard PR #115 verified admin MFA, passkey reauthentication/session binding, current-RP enforcement and unique bulk passwords: revalidate exact source head 0bca4f54e5c74557a47f10ee93ae05f4c2fffd77 (2026-11-26).
 # Goxboard PR #113 billing-cycle boundaries, UTC renewal semantics, and isolated cross-dialect reset cleanup migration: source head 52e8a482aa1c4fa3358149e2b71210aded0595e9 (2026-11-26).
