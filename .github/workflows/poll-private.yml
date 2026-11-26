@@ -1,3 +1,4 @@
+# Goxboard PR #115 restore security-overview refresh after rejected TOTP setup: validate exact source head 3f9585f15fa0ccd94320e4941a48b75c93b79cc6 (2026-11-26).
 # Goxboard PR #115 React import syntax correction after TOTP setup UI refactor: validate exact source head 32affad91010c129cb0624a807f3c16d7f63dc2d (2026-11-26).
 # Goxboard PR #115 TOTP setup UI guards duplicate submissions and clears password after proof: validate exact source head 2ba5a4eac1685133c9fd6277573dab94b9898fa9 (2026-11-26).
 # Goxboard PR #115 TOTP enrollment now requires current-password proof in API and UI: validate exact source head a0a166b30cd7643797a60017508235b7a18ff449 (2026-11-26).
